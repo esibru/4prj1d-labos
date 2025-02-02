@@ -18,7 +18,7 @@ const config = {
   url: 'https://lechjo01.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/4prj1d/',
+  baseUrl: '/4prj1d-labos/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
