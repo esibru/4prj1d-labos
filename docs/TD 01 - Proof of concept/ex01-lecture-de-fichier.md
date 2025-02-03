@@ -48,7 +48,7 @@ programme n'est pas encore chargée en mémoire, le `ClassLoader` localise
 le fichier `.class` correspondant et le charge.
 Cette classe `java.lang.ClassLoader` fournit les mécanismes pour chercher des classes mais également pour chercher des ressources.
 
-Pour vous en covaincre commencez par ajouter à la méthode 
+Pour vous en convaincre commencez par ajouter à la méthode 
 `public static void main(String[] args)` du projet `JavaSandBox` 
 les instructions suivantes : 
 
@@ -62,6 +62,26 @@ System.out.println("Fichier config.properties : " + urlConfig);
 ```
 
 Vérifiez le chemin absolu du fichier `config.properties` affiché par votre programme.
+
+:::warning
+
+Les utilisateurs de Windows peuvent rencontrer une exception du type
+
+```java
+Caused by: java.nio.file.InvalidPathException: Illegal char <:> at index 2: /C:/Users/
+```
+
+Le soucis vient du format de l'url retournée contenant un backslash
+avant la mention du disque `\C\:`.
+Une solution pour contourner ce problème est l'utilisation 
+de la méthode `getSystemResource()` et d'une instance de `URI`
+
+```java
+URI uriConfig = ClassLoader.getSystemResource("config.properties").toURI();
+Path path =  Paths.get(uriConfig);
+```
+
+:::
 
 :::note Exercice b
 
