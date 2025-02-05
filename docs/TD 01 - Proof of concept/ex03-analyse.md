@@ -91,8 +91,8 @@ class Controller {
 }
 class FileUtils  {
   + isFileFound(fileName : String) boolean $
-  + writeTo(results : String, filePath : Path) $
-  + getTraineddataDirectory() $
+  + writeTo(results : String, filePath : Path) Path $
+  + getTraineddataDirectory() String $
 }
 class OcrScanner {
   + OcrScanner() 
