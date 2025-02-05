@@ -97,7 +97,7 @@ class FileUtils  {
 class OcrScanner {
   + OcrScanner() 
   + isFileFound(imageName : String) boolean
-  + setFileToScan(imageName : String) 
+  + setFileToScan(imageName : String) void
   + scan() Path
   - fileToScan : Path
   - tesseract : Tesseract 
