@@ -123,11 +123,8 @@ public class Main extends Application {
 :::note Exercice b
 
 1. Vérifiez en executant l'application que le fichier `hello.fxml` est chargé.
-1. Affichez le `classpath` dans le terminal via la
-propriété système `java.class.path`.
-1. Affichez via la classe `Files` la liste des fichiers présents
-dans le dossier resources. 
-1. Vérifiez que `hello.fxml` est présent dans cette liste.
+1. Vérifiez que le fichier `hello.fxml` est présent dans le dossier 
+`target/class`.
 1. Si vous changez l'instruction qui instancie l'url en 
 `URL resource = Main.class.getResource("hello.fxml");`
 où devez-vous déplacer le fichier `hello.fxml` ?
