@@ -54,7 +54,8 @@ au libellé dans le fichier FXML.
 
 ```xml showLineNumbers
 <VBox alignment="CENTER" spacing="20.0"
-      xmlns:fx="http://javafx.com/fxml">
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="be.esi.prj.HelloController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
