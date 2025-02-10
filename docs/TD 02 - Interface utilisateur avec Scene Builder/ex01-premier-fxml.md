@@ -65,7 +65,7 @@ Ouvrez le fichier `hello.fxml` dans Scene Builder et modifiez :
 
 Ajoutez le fichier `module-info.java`
 
-```java showLineNumbers title="modules-info.java"
+```java showLineNumbers title="module-info.java"
 module be.esi.prj {
     requires javafx.controls;
     requires javafx.fxml;
