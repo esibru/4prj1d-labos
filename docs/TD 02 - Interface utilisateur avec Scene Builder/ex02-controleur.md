@@ -217,7 +217,7 @@ public class HelloController {
         welcomeText.setText(message);
     }
     // highlight-start
-    protected void onHelloButtonClick() {
+    public void onHelloButtonClick() {
         welcomeText.setText("Welcome to JavaFX Application!");
     }
     // highlight-end
