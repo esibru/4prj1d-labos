@@ -67,8 +67,7 @@ au libellé dans le fichier FXML.
 
 :::note Exercice b
 
-Ordonnez les appels de méthodes dans le bon ordre lors de l'exécution 
-de l'application : 
+Écrivez sur une feuille l'ordre dans lequel sont exécutées les méthodes : 
 
 1. `Parent root = fxmlLoader.load();`
 1. `Scene scene = new Scene(root, 640, 800);`
@@ -101,7 +100,7 @@ public void initialize() {
 
 :::note Exercice b
 
-Classez les appels des méthodes dans le bon ordre : 
+Écrivez sur une feuille l'ordre dans lequel sont exécutées les méthodes : 
 
 1. `Parent root = fxmlLoader.load();`
 1. `Scene scene = new Scene(root, 640, 800);`
