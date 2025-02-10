@@ -60,9 +60,7 @@ perdurent quant à elles jusqu'à la sortie de leur `run`.
 l'a créée. Avant l'exécution de la méthode `start` d'une
 thread, sa méthode `setDaemon(boolean)` permet de fixer 
 sa catégorie.
-- 
-Il est possible de demander à une thread d'attendre la fin d'une autre thread.
-C'est la méthode `join` qui s'en charge. 	
+- Il est possible de demander à une thread d'attendre la fin d'une autre thread. C'est la méthode `join` qui s'en charge. 	
 
 :::
 

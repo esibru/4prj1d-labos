@@ -63,7 +63,8 @@ Ouvrez le fichier `hello.fxml` dans Scene Builder et modifiez :
 
 :::
 
-Ajoutez le fichier `module-info.java`
+Ajoutez le fichier `module-info.java` à la racine du projet 
+dans le dossier `src/main/java`.
 
 ```java showLineNumbers title="module-info.java"
 module be.esi.prj {
@@ -81,7 +82,7 @@ Le fichier `module-info.java` est utilisé dans les projets Java
 pour définir les dépendances et les accès aux packages. 
 Par exemple `opens be.esi.prj to javafx.fxml;` permet au module 
 `javafx.fxml` d'accéder aux classes du package `be.esi.prj`.
-Le contenu des fichiers `modules-info.java` sera détaillé
+Le contenu des fichiers `module-info.java` sera détaillé
 dans un futur TD.
 
 :::
