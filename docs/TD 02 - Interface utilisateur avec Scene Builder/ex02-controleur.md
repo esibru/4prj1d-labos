@@ -179,7 +179,7 @@ le contrôleur et le fichier FXML, ajoutez un identifiant au bouton
 dans le fichier FXML.
 
 ```xml showLineNumbers title="hello.fxml"
-    <Button fx:id="helloButton" text="Hello!"/>
+<Button fx:id="helloButton" text="Hello!"/>
 ```
 
 Modifiez ensuite le contrôleur pour :  
@@ -224,6 +224,19 @@ public class HelloController {
 }
 ```
 
+:::tip Remarque : Une autre façon de procéder
 
+Vous pouvez associer une action avec le bouton d'une autre manière.
+
+- Ouvrez le fichier *hello.fxml* via SceneBuilder.
+- Sélectionnez le bouton *helloButton*.
+- Ouvrez via le volet de droite de SceneBuilder le menu *Code*.
+- Ajoutez le nom de la méthode *onHelloButtonClick* dans le champs *On Action*.
+- Ouvrez le contrôleur *HelloController.java* via IntelliJ.
+- Ajoutez *@FXML* devant la méthode *protected void onHelloButtonClick()*
+- Supprimez la déclaration du bouton *@FXML private Button helloButton;*.
+- Supprimez l'instruction *helloButton.setOnAction();*.
+
+:::
 
 
