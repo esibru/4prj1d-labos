@@ -9,7 +9,7 @@ d’entiers en comparant deux méthodes :
 
 Les éléments de ce tableaux sont des entiers générés aléatoirement entre 0 et 100.
 
-L’interface graphique permettra à l’utilisateur de définir 
+L’interface graphique, réalisée à l'aide d'un fichier FXML, permettra à l’utilisateur de définir 
 la taille du tableau et le nombre de threads à utiliser. 
 À l’issue du calcul, les résultats des deux méthodes seront 
 affichés avec les temps d’exécution respectifs.
