@@ -131,7 +131,7 @@ appeler cette nouvelle méthode du contrôleur :
 ```java showLineNumbers title="Main.java"
 @Override
 public void start(Stage stage) throws IOException {
-    URL resource = Main.class.getResource("hello.fxml");
+    URL resource = Main.class.getResource("/hello.fxml");
     FXMLLoader fxmlLoader = new FXMLLoader(resource);
     Parent root = fxmlLoader.load();
     // highlight-start
@@ -158,7 +158,7 @@ créer le lien via la méthode `setController` :
 ```java showLineNumbers
 @Override
 public void start(Stage stage) throws IOException {
-    URL resource = Main.class.getResource("hello.fxml");
+    URL resource = Main.class.getResource("/hello.fxml");
     FXMLLoader fxmlLoader = new FXMLLoader(resource);
     // highlight-start
     HelloController helloController = new HelloController();
