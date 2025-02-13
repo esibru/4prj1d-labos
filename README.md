@@ -6,7 +6,7 @@ via GitHub Pages.
 
 ## URL de publication
 
-Le résultat de ce projet est disponible en ligne sur :
+Le résultat de ce projet est disponible en ligne sur : https://esibru.github.io/4prj1d-labos/
 
 ## Comment collaborer ?
 
