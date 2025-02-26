@@ -92,6 +92,7 @@ class CalculatorUtils {
 }
 class SumCalculator {
   + SumCalculator() 
+  - observable : PropertyChangeSupport
   + addObserver(observer : PropertyChangeListener) void
   + compute(arraySize : int, numThreads : int) void
   - computeSequentialSum(array : int[]) void
@@ -99,7 +100,12 @@ class SumCalculator {
 }
 class SumTask {
   + SumTask(array : int[], startIndex : int, endIndex : int, totalSum : AtomicLong) 
-  - long end
+  - array : int[]
+  - startIndex : int 
+  - endIndex : int 
+  - totalSum : AtomicLong 
+  - end : long 
+  - observable : PropertyChangeSupport
   + addObserver(observer : PropertyChangeListener) void
   + run() void
   ~  getTimeEnd() long
