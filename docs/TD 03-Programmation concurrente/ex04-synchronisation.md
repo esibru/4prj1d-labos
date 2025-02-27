@@ -104,7 +104,7 @@ Rappelons en effet que la méthode `run()` peut être interrompue
 
 ## Méthode synchronised
 
-Pour pallier aux désagréments engendrés par le comportement 
+Pour pallier les désagréments engendrés par le comportement 
 mis en évidence dans l'exemple précédent, on peut utiliser le 
 mot clé `synchronized` comme **modificateur de méthode**.
 
@@ -214,7 +214,7 @@ Répondez aux questions suivantes concernant les classes `MyObjet`, `MyThread` e
 de la manière suivante. Chaque objet en Java possède un verrou 
 et une seule clé ouvrant ce verrou. 
     - Pour exécuter une méthode d'instance non
-	`synchronized` d'un objet don-né, une thread ne doit **pas**
+	`synchronized` d'un objet donné, une thread ne doit **pas**
 	posséder la clé de cet objet. 
     -  Par contre, si cette *méthode* est
 	`synchronized`, la thread qui tente 
