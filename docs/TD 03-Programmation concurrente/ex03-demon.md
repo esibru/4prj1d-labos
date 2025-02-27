@@ -80,7 +80,7 @@ Un nombre trop important de *threads* risque en effet de dégrader
 les performances en demandant beaucoup de traitements au 
 processeur. Les données étant partagées par toutes les threads 
 d'un *process*, il faut veiller à préserver leur cohérence en 
-"synchronisant"\fg\" leurs accès par les fils d'exécutions 
+"synchronisant" leurs accès par les fils d'exécutions 
 concurrents. 
 Le débogage ne sort pas indemne de la programmation 
 multi-fils, l'ordre d'exécution des différentes threads n'étant pas 

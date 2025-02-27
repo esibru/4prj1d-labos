@@ -55,8 +55,8 @@ public class TestMyTimer {
         }
         myTimer.shouldRun = false;
         System.gc();
-        System.out.println("MyTimer: gc called");
-        System.out.println("MyTimer: end");
+        System.out.println("TestMyTimer: gc called");
+        System.out.println("TestMyTimer: end");
     }
 
 }

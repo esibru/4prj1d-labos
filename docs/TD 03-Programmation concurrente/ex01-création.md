@@ -178,7 +178,7 @@ une thread obtenue par **composition**.
 
 :::info Ordre d'exécution des programmes multithreadés
 
-- Contrairement aux programmes rencontrés jusqu'à présent, l'ordre d'exécution des programmes multithreadés n'est pas séquentiel et ne peut dés lors être déterminé à l'avance. En effet, le **scheduler** ou **ordonanceur** du système d'exploitation (et non pas la JVM) gère l'exécution des différentes threads. Il va essayer d'optimiser la parallélisation et donc l'ordre d'exécution des différentes instructions. Une thread peut donc être interrompue pour donner la main à une autre thread à n'importe quel moment de l'exécution de la méthode `run()`. Les conséquences que cela implique sont discutées dans la suite de TD.
+- Contrairement aux programmes rencontrés jusqu'à présent, l'ordre d'exécution des programmes multithreadés n'est pas séquentiel et ne peut dés lors être déterminé à l'avance. En effet, le **scheduler** ou **ordonnanceur** du système d'exploitation (et non pas la JVM) gère l'exécution des différentes threads. Il va essayer d'optimiser la parallélisation et donc l'ordre d'exécution des différentes instructions. Une thread peut donc être interrompue pour donner la main à une autre thread à n'importe quel moment de l'exécution de la méthode `run()`. Les conséquences que cela implique sont discutées dans la suite de TD.
 - Ce concept de parallélisme des tâches est déjà bien présent au 
 niveau des systèmes d'exploitation. On parle d'ailleurs de système 
 d'exploitation multi-tâches gérant l'exécution de plusieurs processus 
