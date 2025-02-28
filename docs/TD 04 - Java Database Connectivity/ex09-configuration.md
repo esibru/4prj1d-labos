@@ -1,4 +1,4 @@
-# Exercice 10 - Fichier properties
+# Exercice 9 - Fichier properties
 
 ```java showLineNumbers
 

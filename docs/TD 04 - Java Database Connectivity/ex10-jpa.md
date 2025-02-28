@@ -1,4 +1,4 @@
-# Exercice 11 - JPA
+# Exercice 10 - JPA
 
 - JPA
 - Hibernate

@@ -1,4 +1,4 @@
-# Exercice 7 -  Tests unitaires
+# Exercice 7 - Tests unitaires
 
 ```java showLineNumbers
 

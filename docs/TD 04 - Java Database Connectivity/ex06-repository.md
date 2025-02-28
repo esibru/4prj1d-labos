@@ -1,4 +1,4 @@
-# Exercice 8 -  Pattern repository
+# Exercice 6 - Pattern repository
 
 ```java showLineNumbers
 
