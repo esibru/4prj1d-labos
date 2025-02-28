@@ -1,4 +1,4 @@
-# Exercice 2 - Requêtes de selection
+# Exercice 2 - Selection de données
 
 Dans cette section vous allez apprendre comment exécuter
 des requêtes de selection dans une base de données via JDBC.
