@@ -95,6 +95,13 @@ public class Selection {
 }
 ```
 
+:::tip try-with-resources
+
+On peut ouvrir plusieurs ressources dans le même try-with-resources, elles seront fermées dans l’ordre inverse de leur ouverture.
+
+:::
+
+
 ## Utilisation d'une jointure
 
 ```java showLineNumbers
