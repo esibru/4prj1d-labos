@@ -79,6 +79,18 @@ Toutes les informations complémentaires sont disponibles
 via la documentation des classes [Statement](https://docs.oracle.com/en/java/javase/23/docs/api/java.sql/java/sql/Statement.html) 
 et [ResultSet](https://docs.oracle.com/en/java/javase/23/docs/api/java.sql/java/sql/ResultSet.html).
 
+:::warning Comment SQLite stocke les dates ?
+
+SQLite n’a pas de type de données natif pour les dates et 
+heures. Les dates peuvent être stockées sous trois formats 
+possibles :
+
+- Texte (format YYYY-MM-DD HH:MM:SS) : Couramment utilisé.
+- Nombre entier (INTEGER) : Timestamp UNIX (secondes depuis 1970).
+- Nombre réel (REAL) : Timestamp en jours julien.
+
+:::
+
 :::note Exercice A : utilisation d'une WHERE clause
 
 Modifiez la requête de selection pour n'afficher que
