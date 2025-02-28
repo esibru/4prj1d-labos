@@ -15,7 +15,7 @@ l’accès à la base de données.
 
 ```
 
-La classe main ne doit rien connaitre de l'accès aux données.
+La classe main ne doit rien connaître de l'accès aux données.
 Les données peuvent provenir d'un fichier, d'une base de données, d'un service rest ou être générées par le code java.
 
 
