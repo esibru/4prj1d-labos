@@ -75,6 +75,10 @@ On peut ouvrir plusieurs ressources dans le même try-with-resources, elles sero
 
 :::
 
+Toutes les informations complémentaires sont disponibles
+via la documentation des classes [Statement](https://docs.oracle.com/en/java/javase/23/docs/api/java.sql/java/sql/Statement.html) 
+et [ResultSet](https://docs.oracle.com/en/java/javase/23/docs/api/java.sql/java/sql/ResultSet.html).
+
 :::note Exercice A : utilisation d'une WHERE clause
 
 Modifiez la requête de selection pour n'afficher que
