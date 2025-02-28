@@ -1,5 +1,13 @@
 # Exercice 3 -  Mise à jour de données
 
+Dans cette section, vous allez apprendre à manipuler une base de 
+données via JDBC en exécutant des requêtes de modification. 
+Vous verrez comment :
+
+1. Mettre à jour des enregistrements existants avec UPDATE.
+1. Insérer de nouvelles données dans une table avec INSERT.
+1. Supprimer des données avec DELETE.
+
 ## Requêtes UPDATE
 
 La différence essentielle avec une requête de selection est 
