@@ -1,12 +1,68 @@
-# Exercice 10 - JPA
+# Exercice 10 - Facultatif - JPA
 
-- JPA
-- Hibernate
-- spring-data-jpa
+Dans les cours de Web vous avez utilisé Spring Data JPA, qui 
+facilite énormément l’accès aux bases de données en générant 
+automatiquement des requêtes et en gérant l’interaction avec 
+Hibernate. 
+
+Spring Data JPA est conçu pour fonctionner avec l’écosystème 
+Spring mais une application de bureau n’a pas besoin de Spring.
+
+Contrairement aux applications où Spring gère les beans et l’injection de dépendances, une application de bureau doit gérer explicitement ses connexions et transactions, ce qui n’est pas le mode de fonctionnement naturel de Spring Data JPA.
+
+Dans cette section, vous allez apprendre à implémenter un 
+Repository en utilisant JPA et Hibernate, sans la couche 
+d’abstraction offerte par Spring Data JPA.
+
+Dans cette section, vous allez :
+
+- Configurer Hibernate et JPA manuellement (sans Spring Data JPA).
+- Définir une entité JPA et la mapper à une table de base de données.
+- Écrire un Repository personnalisé qui gère les opérations CRUD (Create, Read, Update, Delete) en utilisant EntityManager.
+- Gérer les transactions avec EntityTransaction.
+
+## Quelques rappels
+
+### JPA (Java Persistence API)
+
+JPA est une spécification Java qui définit une interface 
+standard pour la gestion des bases de données relationnelles via 
+des objets Java. Elle permet aux développeurs d'utiliser des 
+entités Java pour interagir avec la base de données sans écrire
+directement du SQL.
+
+### Hibernate
+
+Hibernate est une implémentation populaire de JPA. C'est un ORM 
+(Object-Relational Mapping) qui simplifie la gestion de la 
+persistance en convertissant automatiquement les objets Java en 
+requêtes SQL. Il fournit des fonctionnalités avancées comme la 
+gestion du cache, la validation des entités et le support de 
+différentes bases de données.
+
+### Spring Data JPA
+
+Spring Data JPA est une surcouche de JPA fournie par le 
+framework Spring. Elle simplifie encore davantage l'accès aux 
+bases de données en réduisant le code boilerplate, en offrant 
+des repositories automatiques et en permettant la génération 
+dynamique des requêtes à partir de méthodes d’interface.
 
 ## Dépendances
 
-```xml showLineNumbers
+Avant de pouvoir utiliser JPA avec Hibernate dans notre projet, 
+il est nécessaire d’ajouter les bonnes dépendances dans le 
+fichier pom.xml de Maven.
+
+JPA est une spécification, et Hibernate est une implémentation 
+courante de cette spécification. Nous devons donc inclure :
+
+- L’API JPA pour utiliser les annotations et les fonctionnalités standard.
+- Hibernate en tant que fournisseur JPA, qui gérera les interactions avec la base de données.
+- Hibernate Community Dialects pour assurer la compatibilité avec certaines bases comme SQLite.
+- SLF4J (Simple Logging Facade for Java), une bibliothèque de journalisation utilisée par Hibernate pour afficher des messages de log.
+
+```xml showLineNumbers title="pom.xml"
 <dependency>
         <groupId>jakarta.persistence</groupId>
         <artifactId>jakarta.persistence-api</artifactId>
@@ -43,7 +99,20 @@
 
 ## Configuration
 
-```xml showLineNumbers
+Dans une application utilisant JPA avec Hibernate, le fichier 
+persistence.xml est essentiel pour définir la Persistence Unit. 
+Ce fichier permet de configurer :
+- Le provider JPA (ici, Hibernate).
+- L’URL de connexion à la base de données et le driver JDBC utilisé.
+- Les paramètres spécifiques à Hibernate, comme la génération automatique du schéma.
+- Le mode de gestion des transactions.
+
+Ce fichier est placé dans le dossier META-INF du dossier 
+resources et est lu par JPA pour établir la connexion à la base 
+de données.
+
+
+```xml showLineNumbers title="persistence.xml"
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="https://jakarta.ee/xml/ns/persistence"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -72,9 +141,20 @@
 
 ## De DTO à Entité
 
-```java showLineNumbers
-package be.esi.prj.orm;
+Dans une application utilisant JPA avec Hibernate, les DTO (Data 
+Transfer Objects) ne sont plus nécessaires pour représenter les 
+données en base. 
+À la place, vous utilisez des entités JPA, qui sont des classes 
+annotées permettant de mapper directement les tables de la base 
+de données.
 
+Ces entités :
+
+- Sont annotées avec @Entity pour être reconnues par JPA.
+- Peuvent être directement gérées par le EntityManager (insertion, mise à jour, suppression, requêtes).
+- Simplifient le code en évitant de devoir convertir constamment entre DTO et objets métier.
+
+```java showLineNumbers title="User.java"
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -130,9 +210,18 @@ public class User {
 
 ## Repository
 
-```java showLineNumbers
-package be.esi.prj.orm;
+Maintenant que vous avez défini votre entité JPA, vous allez
+implémenter le UserRepository en utilisant JPA avec Hibernate. 
+Contrairement à l’approche JDBC classique, où vous deviez écrire 
+des requêtes SQL manuellement, JPA vous permet de manipuler 
+directement les entités via l'EntityManager.
 
+Dans cette section, vous allez :
+- Utiliser EntityManager pour insérer, mettre à jour, supprimer et rechercher des utilisateurs.
+- Implémenter les méthodes du UserRepository en tirant parti des fonctionnalités de JPA.
+- Remplacer la gestion manuelle des requêtes SQL par des appels simplifiés aux entités.
+
+```java showLineNumbers title="UserRepository.java"
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -193,49 +282,10 @@ public class UserRepository {
 }
 ```
 
-## Utiliser le repository
+:::note Exercice A : Utiliser le nouveau repository
 
-```java showLineNumbers
-package be.esi.prj.orm;
+Remplacez dans la classe `RepositorySandbox` l'instance
+de UserRepository utilisant JDBC par une instance utilisant
+JPA. Constatez-vous une différence ?
 
-public class OrmTest {
-
-    public static void main(String[] args) {
-        // Création d'un instance du UserRepository
-        UserRepository userRepository = new UserRepository();
-
-        // 1. Ajout d'utilisateurs
-        User user1 = new User(1L, "Alice", "alice@example.com");
-        User user2 = new User(2L, "Bob", "bob@example.com");
-
-        System.out.println("Ajout des utilisateurs...");
-        userRepository.addUser(user1);
-        userRepository.addUser(user2);
-
-        // 2. Récupération et affichage de tous les utilisateurs
-        System.out.println("\nListe des utilisateurs après ajout :");
-        for (User user : userRepository.getAllUsers()) {
-            System.out.println(user);
-        }
-
-        // 3. Récupération d'un utilisateur par ID
-        System.out.println("\nRécupération de l'utilisateur avec ID 1 :");
-        User retrievedUser = userRepository.getUserById(1L);
-        System.out.println(retrievedUser);
-
-        // 4. Suppression d'un utilisateur
-        System.out.println("\nSuppression de l'utilisateur avec ID 2...");
-        userRepository.deleteUser(2L);
-
-        // 5. Affichage des utilisateurs après suppression
-        System.out.println("\nListe des utilisateurs après suppression :");
-        for (User user : userRepository.getAllUsers()) {
-            System.out.println(user);
-        }
-
-        // 6. Fermeture du UserRepository (libération des ressources)
-        userRepository.close();
-    }
-
-}
-```
+:::
