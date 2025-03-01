@@ -21,66 +21,63 @@ façon fiable. Plus d'informations sur la [page wikipédia dédiée](https://fr.
 
 L'exemple ci-dessous illustre l'utilisation d'une transaction.
 Le code proposé : 
-1. insère un utilisateur Alice.
-1. insère un utilisateur Bob.
-1. produit une erreur lors de l'insertion de Charlie.
+1. insère un utilisateur Mallory.
+1. insère un utilisateur Oscar.
+1. produit une erreur lors de l'insertion de l'utilisateur Trudy.
 1. Les deux premières insertions sont annulées (ROLLBACK).
 
 
-```java showLineNumbers
+```java showLineNumbers title="Transaction.java"
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class TransactionExample {
+public class Transaction {
     public static void main(String[] args) {
         String url = "jdbc:sqlite:external-data/demo.db";
 
         try (Connection conn = DriverManager.getConnection(url)) {
 
             // Désactiver l'auto-commit pour gérer la transaction
-            conn.setAutoCommit(false); 
+            conn.setAutoCommit(false);
 
-            try (PreparedStatement pstmt1 
+            try (PreparedStatement pstmt1
                          = conn.prepareStatement(
-                                 "INSERT INTO users (name, age) VALUES (?, ?)");
-                 PreparedStatement pstmt2 
+                    "INSERT INTO users (name, height) VALUES (?, ?)");
+                 PreparedStatement pstmt2
                          = conn.prepareStatement(
-                                 "INSERT INTO users (name, age) VALUES (?, ?)");
-                 PreparedStatement pstmt3 
+                         "INSERT INTO users (name, height) VALUES (?, ?)");
+                 PreparedStatement pstmt3
                          = conn.prepareStatement(
-                                 "INSERT INTO users (name, age) VALUES (?, ?)")) {
+                         "INSERT INTO users (name, height) VALUES (?, ?)")) {
 
-                // Insérer Alice
-                pstmt1.setString(1, "Alice");
-                pstmt1.setInt(2, 25);
+                pstmt1.setString(1, "Mallory");
+                pstmt1.setDouble(2, 178);
                 pstmt1.executeUpdate();
 
-                // Insérer Bob
-                pstmt2.setString(1, "Bob");
-                pstmt2.setInt(2, 30);
+                pstmt2.setString(1, "Oscar");
+                pstmt2.setDouble(2, 169);
                 pstmt2.executeUpdate();
 
-                // Erreur simulée avec Charlie
-                pstmt3.setString(1, "Charlie");
-                pstmt3.setInt(2, 100 / 0); // Erreur volontaire
+                pstmt3.setString(1, "Trudy");
+                pstmt3.setDouble(2, 100 / 0); // Erreur volontaire
 
                 pstmt3.executeUpdate();
 
                 // Si tout fonctionne, on valide la transaction
-                conn.commit(); 
-                
+                conn.commit();
+
                 System.out.println("Transaction réussie !");
 
             } catch (Exception e) {
                 // Annuler toutes les opérations en cas d'erreur
-                conn.rollback(); 
-                System.out.println("Transaction annulée : " 
+                conn.rollback();
+                System.out.println("Transaction annulée : "
                         + e.getMessage());
             } finally {
                 // Remettre l'auto-commit par défaut
-                conn.setAutoCommit(true); 
+                conn.setAutoCommit(true);
             }
 
         } catch (SQLException e) {
@@ -88,7 +85,6 @@ public class TransactionExample {
         }
     }
 }
-
 ```
 
 :::note Exercice A : Vérifiez le rollback
@@ -112,7 +108,5 @@ Notez dans cet exemple :
 - Les transactions améliorent les performances lorsqu'elles réduisent le nombre d’écritures et optimisent la gestion des ressources.
 - Elles peuvent nuire aux performances si elles sont trop longues, bloquent d’autres utilisateurs ou consomment trop de mémoire.
 - Une bonne gestion des transactions consiste à les rendre courtes et efficaces, en validant (COMMIT) rapidement les modifications pour éviter les blocages inutiles.
-
-Bonnes pratiques : Utiliser des transactions pour regrouper des opérations logiquement liées, mais éviter les transactions longues qui monopolisent les ressources.
 
 :::

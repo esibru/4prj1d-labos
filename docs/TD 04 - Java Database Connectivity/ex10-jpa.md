@@ -70,7 +70,7 @@
 </persistence>
 ```
 
-## Entité
+## De DTO à Entité
 
 ```java showLineNumbers
 package be.esi.prj.orm;

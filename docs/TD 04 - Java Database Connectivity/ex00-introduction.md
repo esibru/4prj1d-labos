@@ -1,31 +1,25 @@
 # Introduction
 
-Ce TD a pour objectif de vous appendre à développer des applications Java 
-connectées à une base de données. Pour ce faire nous utiliserons la librairie JDBC.
-Dans le cadre de se TD nous utiliserons SQLite comme système de persistance.
+Ce TD vous guidera dans l'apprentissage de la connexion et de 
+l'interaction avec une base de données en Java. 
+Vous commencerez par découvrir JDBC (Java Database 
+Connectivity), une API permettant d'exécuter des requêtes SQL et 
+d'interagir avec divers systèmes de gestion de bases de données 
+(SGBD).
 
-Java Data Base Connectivity est une API qui permet d’exploiter des bases de données
-au travers de requêtes SQL. Cette API permet d’écrire un code indépendant du SGBD
-utilisé.
+Dans un premier temps, vous apprendrez à utiliser SQLite avec 
+JDBC, un SGBD léger et simple à intégrer dans une application 
+Java. 
+Vous verrez ensuite comment exécuter des requêtes SQL (SELECT, 
+INSERT, UPDATE, DELETE) via JDBC pour manipuler les données 
+stockées.
 
-JDBC présente essentiellement des interfaces qui sont implémentées différemment pour
-chacun des SGBD auxquels nous désirerons accéder. Bien évidemment, à l’exécution du
-programme il faut disposer du driver JDBC (bibliothèque java spécifique d’accès au SGBD)
-adapté au système de gestion de base de données cible.
-Nous nous limiterons ici aux informations indispensables pour débuter.
+Une fois ces bases maîtrisées, vous structurerez votre code en 
+appliquant le pattern Repository, qui permet d’organiser 
+proprement l’accès aux données et de séparer la logique métier 
+de la gestion des bases de données.
 
-## Base de données SQLite
-
-SQLite est une bibliothèque écrite en langage C qui propose un moteur de base
-de données relationnelle accessible par le langage SQL. L’intégralité de la base
-de données (déclarations, tables, index et données) est stockée dans un fichier
-indépendant de la plateforme.
-
-Vous trouverez toutes les informations concernant SQLite sur le site https://www.
-sqlite.org/index.html.
-On peut utiliser SQLite en mode console via l’installation de sqlite3 dont la 
-documentation est accessible via ce lien https://www.sqlite.org/cli.html
-
-On peut également utiliser l’outil DB Browser for SQLite qui propose une interface
-plus "accessible". Installé à l’adresse : C:\Program Files\DB Browser for SQLite sur
-les machines de l’école, vous pouvez le télécharger via https://sqlitebrowser.org/.
+Enfin, vous découvrirez JPA (Java Persistence API) avec 
+Hibernate, une solution qui simplifie la gestion des bases de 
+données en Java en permettant de manipuler les données sous 
+forme d’objets sans écrire directement de requêtes SQL.

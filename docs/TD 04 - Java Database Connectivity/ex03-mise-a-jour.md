@@ -12,25 +12,25 @@ Vous verrez comment :
 
 La différence essentielle avec une requête de selection est 
 l’utilisation de la méthode
-`Statement.executeUpdate()` , au lieu de 
+`Statement.executeUpdate()` au lieu de 
 `Statement.executeQuery()`. 
 Cette nouvelle méthode permet d’exécuter
 des mises à jour au sein d’une table **et** 
 **retourne le nombre de records impactés** par cette mise à jour.
 
-```java showLineNumbers
+```java showLineNumbers title="UpdateQuery.java"
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Update {
+public class UpdateQuery {
     public static void main(String[] args) {
         String url = "jdbc:sqlite:external-data/demo.db";
 
         String sql = """
-                UPDATE users 
-                    SET email = 'alice@student.he2b.be' 
+                UPDATE users
+                    SET height = 1.75
                     WHERE id = 1
                 """.stripIndent();
 
@@ -39,7 +39,7 @@ public class Update {
 
             int rowsUpdated = stmt.executeUpdate(sql);
 
-            System.out.println("Nombre de lignes mises à jour : " 
+            System.out.println("Nombre de lignes mises à jour : "
                     + rowsUpdated);
 
         } catch (SQLException e) {
@@ -48,6 +48,16 @@ public class Update {
     }
 }
 ```
+
+:::tip SQLITE_BUSY
+
+Si le message 
+**Erreur : [SQLITE_BUSY] The database file is locked (database is locked)**
+apparaît, la base de données est bloquée.
+Validez vos dernières mises à jour et la base de données sera
+à nouveau accessible.
+
+:::
 
 :::tip Text Blocks ou Chaînes de texte multilignes
 
@@ -76,7 +86,7 @@ Pour insérer de nouveaux éléments dans une table, la méthode
 `Statement.executeUpdate()` est à nouveau utilisée. Toutefois, 
 lors de l'insertion d'un nouvel utilisateur dans la table **Users**,
 la clé primaire de cet utilisateur est générée automatiquement 
-par la base de données grâce à l'attribut **AUTOINCREMENT**.
+par la base de données grâce à la commande **AUTOINCREMENT**.
 
 Il est nécessaire de récupérer cette clé générée afin que Java 
 puisse retrouver l'utilisateur via une sélection dans la table 
@@ -85,37 +95,37 @@ conservée dans l'instance Statement utilisée pour la requête
 d'insertion. Pour obtenir la valeur de cette clé, on peut la 
 récupérer via la méthode `Statement.getGeneratedKeys()`.
 
-```java showLineNumbers
+```java showLineNumbers title="InsertQuery.java"
 import java.sql.*;
 
-public class InsertGeneratedKey {
+public class InsertQuery {
     public static void main(String[] args) {
         String url = "jdbc:sqlite:external-data/demo.db";
 
         String sql = """
-                        INSERT INTO 
-                            users (name, age) 
-                        VALUES 
-                            ('Charlie', 35)
+                        INSERT INTO
+                            users (name, birth_date, height, is_active)
+                        VALUES
+                            ('Eve', '1980-02-28', 1.83, 1);
                 """.stripIndent();
 
         try (Connection conn = DriverManager.getConnection(url);
              Statement stmt = conn.createStatement()) {
-            
+
             int rowsInserted = stmt.executeUpdate(sql);
-            System.out.println("Nombre de lignes insérées : " 
+            System.out.println("Nombre de lignes insérées : "
                     + rowsInserted);
 
             if (rowsInserted > 0) {
-                
+
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                    
+
                     if (generatedKeys.next()) {
-                        int newId = generatedKeys.getInt(1); 
-                        System.out.println("Nouvel utilisateur inséré avec l'ID : " 
+                        int newId = generatedKeys.getInt(1);
+                        System.out.println("Nouvel utilisateur inséré avec l'ID : "
                                 + newId);
                     }
-                    
+
                 }
             }
         } catch (SQLException e) {
@@ -147,20 +157,20 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Delete {
+public class DeleteQuery {
     public static void main(String[] args) {
         String url = "jdbc:sqlite:external-data/demo.db";
 
-        String sql = "DELETE FROM users WHERE name = 'Charlie'";
-        
+        String sql = "DELETE FROM users WHERE id = 5";
+
         try (Connection conn = DriverManager.getConnection(url);
-            Statement stmt = conn.createStatement()) {
-            
+             Statement stmt = conn.createStatement()) {
+
             int rowsDeleted = stmt.executeUpdate(sql);
-            
-            System.out.println("Nombre de lignes supprimées : " 
+
+            System.out.println("Nombre de lignes supprimées : "
                     + rowsDeleted);
-            
+
         } catch (SQLException e) {
             System.out.println("Erreur : " + e.getMessage());
         }
@@ -170,12 +180,11 @@ public class Delete {
 
 :::note Exercice A : Ajout et suppression
 
-Développez un main qui permet de :
-1. ajouter une commande dans la table Command
-1. afficher le contenu de la table Command
-1. supprimer la commande ajoutée de la table Command
-1. afficher le contenu de la table Command
-
-Adaptez la requête d'insertion à une table sans clé autogénérée.
+Développez une méthode main exécutant toutes les instructions
+ci-dessous :
+1. Ajouter une nouvelle commande dans la table Orders pour l'utilisateur d'identifiant 3.
+1. Afficher toutes les commandes contenues dans la table Orders.
+1. Supprimer la commande ajoutée de la table Orders.
+1. Afficher toutes les commandes contenues dans la table Orders.
 
 :::

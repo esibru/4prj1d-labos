@@ -7,7 +7,7 @@ l’accès à la base de données.
 
 ```bash
 /src
- ├── model
+ ├── dto
  │   ├── User.java
  ├── repository
  │   ├── UserRepository.java
@@ -38,18 +38,6 @@ public class UserRepository {
 
     public UserRepository() {
         
-    }
-
-    private void createTableIfNotExists() {
-        String sql = "CREATE TABLE IF NOT EXISTS users (" +
-                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                     "name TEXT NOT NULL)";
-        try (Connection conn = DriverManager.getConnection(url);
-             Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     public void addUser(User user) {
@@ -148,12 +136,156 @@ public class UserRepository {
 Dans les imports de la classe `Main` vous observez normalement ...
 `Main` dépend de SqlException ce qui brise l'encapsulation.
 
+Diagramme de dépendance
+
+```mermaid
+classDiagram
+    class UserRepository {
+        +addUser(User user) void throws SQLException
+        +findUserById(int id) User throws SQLException
+    }
+
+    class Main {
+        +main(String[] args) void
+    }
+
+    class SQLException {
+        <<exception>>
+    }
+
+    UserRepository ..> SQLException : throws
+    Main ..> UserRepository : uses
+    Main ..> SQLException : catches
+```
+
+
 Modifiez le repository pour encapsuler la SQLException.
 
+```mermaid
+classDiagram
+    class UserRepository {
+        +addUser(User user) void throws RepositoryException
+        +findUserById(int id) User throws RepositoryException
+    }
+
+    class Main {
+        +main(String[] args) void
+    }
+
+    class RepositoryException {
+        <<exception>>
+        +SQLException sqlException
+    }
+
+    class SQLException {
+        <<exception>>
+    }
+
+    UserRepository ..> RepositoryException : throws
+    RepositoryException ..> SQLException : encapsulates
+    Main ..> UserRepository : uses
+    Main ..> RepositoryException : catches
+```
+
+Pourquoi encapsuler SQLException dans RepositoryException ?
+
+1️⃣ Abstraction des détails d’implémentation
+
+    SQLException est spécifique à JDBC.
+    Un Repository doit cacher les détails de la base de données.
+
+2️⃣ Unification des erreurs
+
+    Permet de centraliser et standardiser la gestion des erreurs dans l’application.
+    L’appelant n’a pas besoin de gérer directement SQLException (pas de throws SQLException partout).
+
+3️⃣ Éviter les checked exceptions (SQLException est checked)
+
+    RuntimeException permet de ne pas imposer le throws SQLException dans toutes les méthodes.
+    Facilite l’utilisation du Repository dans une application plus large (ex: services, API REST).
+
+ Avantages de cette approche
+
+✅ Encapsulation de SQLException
+
+    Évite de propager les erreurs SQL brutes dans les services / contrôleurs.
+
+✅ Code plus propre & maintenable
+
+    RepositoryException remplace SQLException, donc plus besoin de throws SQLException partout.
+
+✅ Gestion centralisée des erreurs
+
+    Possibilité de logger toutes les erreurs JDBC en interceptant RepositoryException au plus haut niveau.    
+
+
+Si vous avez plusieurs repository, utilisez une interface.
+
+```bash
+/src
+ ├── dto
+ │   ├── User.java
+ ├── repository
+ │   ├── IRepository.java
+ │   ├── UserRepository.java
+ ├── Main.java
+
+```
+
+Diagramme de classe.
+
+Vous retrouvez une notation similaire que vous
+avez découvert avec spring-data-japa.
+
+Créér la classe ConnexionManager.
+
+```java
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
+
+class ConnectionManager {
+
+    private static Connection connection;
+
+    static Connection getConnection() {
+        if (connection == null) {
+            try {
+                String url = "jdbc:sqlite:external-data/demo.db";
+                connection = DriverManager.getConnection(url);
+            } catch (SQLException ex) {
+                throw new RepositoryException("Connexion impossible: " + ex.getMessage());
+            }
+        }
+        return connection;
+    }
+
+    static void close() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            throw new RepositoryException("Fermeture impossible: " + e.getMessage());
+        }
+    }
+}
+
+```
 
 :::note Exercice B : une connexion unique
 
-Modifiez le repository pour se connecter une seule fois.
+Modifiez le repository pour se connecter une seule fois
+en utilisant la classe ConnectionManager.
+
+Ajoutez une méthode au Repository close qui appel 
+la méthode close de la classe ConnectionManager.
+
+modifiez le main pour fermer la connexion à la fin.
 
 :::
+
 

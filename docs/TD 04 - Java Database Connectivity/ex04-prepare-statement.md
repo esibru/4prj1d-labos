@@ -6,13 +6,15 @@ les données saisies.
 
 Dans cette section, vous allez :
 - Comprendre comment une requête non sécurisée peut être exploitée.
-- Observer les risques liés à l'utilisation de Statement.
-- Découvrir comment PreparedStatement permet de sécuriser les requêtes en empêchant les injections SQL.
+- Observer les risques liés à l'utilisation de la classe **Statement**.
+- Découvrir comment la classe **PreparedStatement** permet de sécuriser les requêtes en empêchant les injections SQL.
+
+## Une faille de la classe Statement
 
 Testez le code ci-dessous qui permet à un utilisateur 
 d'entrer un nom pour faire une recherche dans la base de données.
 
-```java showLineNumbers
+```java showLineNumbers title="SQLInjection.java"
 import java.sql.*;
 import java.util.Scanner;
 
@@ -25,16 +27,19 @@ public class SQLInjectionExample {
         System.out.print("Entrez un nom d'utilisateur : ");
         String userInput = scanner.nextLine();
 
-        String sql = "SELECT * FROM users WHERE name = '" + userInput + "'"; 
+        String sql = "SELECT * FROM users WHERE name = '" + userInput + "'";
 
         try (Connection conn = DriverManager.getConnection(url);
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                System.out.println("ID: " + rs.getInt("id") 
-                        + ", Name: " + rs.getString("name") 
-                        + ", Age: " + rs.getInt("age"));
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+
+                System.out.println("ID : " + id
+                        + " | Nom : " + name
+                );
             }
 
         } catch (SQLException e) {
@@ -44,7 +49,7 @@ public class SQLInjectionExample {
 }
 ```
 
-Entrez `Alice` pour obtenir les informations de cette utilisatrice. Que constatez-vous si vous entrez `Alice' OR 1=1` ?
+Entrez `Alice` pour obtenir les informations de cette utilisatrice. Que constatez-vous si vous entrez `Alice' OR 1=1;'` ?
 
 :::info injection sql
 
@@ -58,8 +63,6 @@ la sécurité.
 :::
 
 
-Que constatez-vous si vous entrez `Alice'; UPDATE users SET name=’Patrick’ where id=1;` ?
-
 :::danger Sécurité
 
 Si vous laissez un utilisateur entrer d’une manière ou d’une 
@@ -68,16 +71,18 @@ récupérer ou modifier des données.
 
 :::
 
+## Une solution avec la classe PreparedStatement
+
 La classe `Statement` utilisée jusqu’à présent reçoit l’ensemble 
 de la requête qui doit être exécutée. 
 Cependant on peut utiliser la classe `PreparedStatement` qui 
 peut recevoir uniquement les paramètres de la requête.
 
-```java showLineNumbers
+```java showLineNumbers title="SecureQuery.java"
 import java.sql.*;
 import java.util.Scanner;
 
-public class SecureQueryExample {
+public class SecureQuery {
     public static void main(String[] args) {
         String url = "jdbc:sqlite:external-data/demo.db";
         Scanner scanner = new Scanner(System.in);
@@ -94,9 +99,12 @@ public class SecureQueryExample {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    System.out.println("ID: " + rs.getInt("id") 
-                            + ", Name: " + rs.getString("name") 
-                            + ", Age: " + rs.getInt("age"));
+                    int id = rs.getInt("id");
+                    String name = rs.getString("name");
+
+                    System.out.println("ID : " + id
+                            + " | Nom : " + name
+                    );
                 }
             }
         } catch (SQLException e) {
@@ -114,6 +122,6 @@ mutateurs qui spécifient le type du paramètre entré.
 :::note Exercice A : Tester PrepareStatement
 
 Vérifiez que l'injection SQL est impossible
-en introduisant la valeur `Alice' OR 1=1`.
+en introduisant la valeur `Alice' OR 1=1;'`.
 
 :::
