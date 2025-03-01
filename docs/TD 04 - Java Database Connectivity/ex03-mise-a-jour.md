@@ -8,6 +8,31 @@ Vous verrez comment :
 1. Insérer de nouvelles données dans une table avec INSERT.
 1. Supprimer des données avec DELETE.
 
+:::tip Text Blocks ou Chaînes de texte multilignes
+
+Un text block est une chaîne littérale délimitée par trois 
+guillemets doubles ("""), ce qui permet de conserver la 
+structure d'indentation et les sauts de ligne du texte tel quel,
+sans avoir à gérer les caractères d'échappement.
+
+```java
+String multilineString = """
+        Ligne 1
+        Ligne 2
+        Ligne 3
+        """;
+```
+
+Si vous souhaitez supprimer l'indentation dans la chaîne de 
+caractères, vous pouvez utiliser la méthode 
+`multilineString.stripIndent()`.
+
+Cette syntaxe peut se révéler utile lors de l'écriture de longue
+requête SQL.
+
+:::
+
+
 ## Requêtes UPDATE
 
 La différence essentielle avec une requête de selection est 
@@ -56,27 +81,6 @@ Si le message
 apparaît, la base de données est bloquée.
 Validez vos dernières mises à jour et la base de données sera
 à nouveau accessible.
-
-:::
-
-:::tip Text Blocks ou Chaînes de texte multilignes
-
-Un text block est une chaîne littérale délimitée par trois 
-guillemets doubles ("""), ce qui permet de conserver la 
-structure d'indentation et les sauts de ligne du texte tel quel,
-sans avoir à gérer les caractères d'échappement.
-
-```java
-String multilineString = """
-        Ligne 1
-        Ligne 2
-        Ligne 3
-        """;
-```
-
-Si vous souhaitez supprimer l'indentation dans la chaîne de 
-caractères, vous pouvez utiliser la méthode 
-`multilineString.stripIndent()`.
 
 :::
 

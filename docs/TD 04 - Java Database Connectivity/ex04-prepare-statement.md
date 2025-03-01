@@ -51,18 +51,6 @@ public class SQLInjectionExample {
 
 Entrez `Alice` pour obtenir les informations de cette utilisatrice. Que constatez-vous si vous entrez `Alice' OR 1=1;'` ?
 
-:::info injection sql
-
-Une injection SQL est un groupe de méthodes d’exploitation de 
-faille de sécurité d’une application interagissant avec une base 
-de données. 
-Elle permet d’injecter dans la requête SQL en cours un morceau 
-de requête non prévu par le système et pouvant en compromettre 
-la sécurité.
-
-:::
-
-
 :::danger Sécurité
 
 Si vous laissez un utilisateur entrer d’une manière ou d’une 
