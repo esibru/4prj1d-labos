@@ -1,31 +1,30 @@
 # Exercice 9 - Fichier properties
 
-Il est courant d’utiliser un fichier .properties pour stocker les paramètres de connexion (URL, utilisateur, mot de passe) à une base de données en Java. 
-Cela permet d'externaliser la configuration et d'éviter de coder en dur les informations sensibles.
+Il est courant d’utiliser un fichier .properties pour stocker 
+les paramètres de connexion (URL, utilisateur, mot de passe) à 
+une base de données en Java. 
+Cela permet d'externaliser la configuration et d'éviter de coder
+en dur les informations sensibles.
+Un fichier .properties peut être édité par un administrateur 
+système sans modifier le code Java.
 
+Ce fichier présent dans les ressources du projet peut prendre la
+forme suivante
 
 ```properties showLineNumbers title="database.properties"
-db.url=jdbc:sqlite:database.db
+db.url=jdbc:sqlite:demo.db
 db.user=admin
 db.password=secret
 ```
 
-✅ Séparation de la configuration et du code
+Comme l'architecture respecte le principe SOLID, seule la classe 
+`ConnectionManager` responsable de la connexion doit être 
+modifiée pour lire les données présentes dans ce fichier.
 
-    Permet de modifier les identifiants sans recompilation du programme.
-    Facilite la gestion des environnements (développement, test, production).
+Heureusement Java dispose d'une classe spécifique pour gérer les 
+fichiers properties.
 
-✅ Sécurité améliorée
-
-    Évite d’exposer des identifiants dans le code source.
-    Peut être exclu du versionnement (.gitignore).
-
-✅ Facilité d'administration
-
-    Un fichier .properties peut être édité par un administrateur système sans modifier le code Java.
-    Compatible avec les outils de déploiement (Docker, CI/CD, etc.).
-
-```java showLineNumbers
+```java showLineNumbers title="ConnectionManager.java"
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -80,14 +79,13 @@ class ConnectionManager {
 
 :::note Exercice A : Configuration
 
-Créez une base de données SqLite protégée par un user et
-un password. 
+Créez une base de données SqLite protégée par un mot de passe.
 
-Ajoutez le fichier database.properties aux ressources
-de votre projet avec les valeurs utilisées pour se connecter à la base de données
-SqLite créé à l'étape précédente.
+Ajoutez le fichier `database.properties` aux ressources
+de votre projet avec les valeurs utilisées pour se connecter à 
+la base de données SqLite créé à l'étape précédente.
 
-Modifiez la classe ConnectionManager pour utiliser les valeurs
+Modifiez la classe `ConnectionManager` pour utiliser les valeurs
 de ce fichier properties pour se connecter et testez que votre
 application puisse se connecter à la base de données SqLite.
 
