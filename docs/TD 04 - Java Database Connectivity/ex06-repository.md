@@ -1,8 +1,21 @@
 # Exercice 6 - Design pattern repository
 
-Dans cette section vous allez structurer votre code pour 
-implémenter le patron de conception Repository et séparer la 
-logique de l’application de l’accès à la base de données.
+Dans cette section vous allez explorer le pattern Repository en Java, 
+un modèle qui permet d'organiser et de centraliser l'accès aux données, 
+tout en rendant le code plus propre et maintenable. 
+Ce pattern est couramment utilisé dans les applications qui interagissent 
+avec une base de données.
+
+Avant de créer le UserRepository, vous allez parcourir quelques 
+concepts et étapes clés pour comprendre pleinement le processus 
+de structuration du code.
+
+- étape 1 : Data Transfer Object avec la classe `UserDto`.
+- étape 2 : Wrapper d'exception avec la classe `RepositoryException`.
+- étape 3 : Classe de connexion à la base de données `ConnectionManager`.
+
+Enfin, vous allez combiner ces concepts pour créer un UserRepository qui 
+utilise les requêtes SQL que vous avez apprises dans les exercices précédents. 
 
 La structure du projet que vous allez construire est
 la suivante : 
@@ -50,8 +63,8 @@ Dès qu'une classe contient `import java.sql.SQLException`, elle
 devient dépendante à l'implémentation de l'accès aux données.
 Afin d'éviter que toutes les classes métier dépendent de cette 
 SQLException, vous allez créer une **RepositoryException**.
-Cette exception personnalisée est une exception enveloppante
-(wrapper) qui permet de gérer toutes les erreurs liées à la 
+Cette exception personnalisée est une exception enveloppante,
+ou **wrapper**, qui permet de gérer toutes les erreurs liées à la 
 couche de persistance dans une application sans que les détails 
 techniques spécifiques à JDBC ne se propagent au reste de 
 l'application.
@@ -106,7 +119,6 @@ class ConnectionManager {
 }
 ```
 
-
 ## Première version du repository
 
 L’idée derrière le Repository pattern est d’avoir au sein de 
@@ -118,6 +130,23 @@ utilisateurs.
 Si nous avions besoin d’accéder aux informations concernant les 
 commandes nous créerions une classe `OrdersRepository`.
 
+:::tip La classe Optional
+
+En Java, l'utilisation de la classe Optional permet de gérer de 
+manière plus élégante les valeurs null et d'éviter les erreurs 
+courantes liées aux **NullPointerException**.
+
+Utiliser Optional dans les méthodes de retour permet d'exprimer
+l'intention du code plus clairement. Cela montre que le résultat
+de l'opération peut ou non être présent. 
+Plutôt que de renvoyer un null, qui peut être négligé ou mal 
+compris, vous utilisez un Optional pour signaler explicitement 
+l'absence de valeur.
+
+:::
+
+La classe UserRepository reprend ci-dessous toutes les requêtes
+que vous avez utilisées dans les exercices précédents.
 
 ```java showLineNumbers title="UserRepository.java"
 import dto.UserDto;
@@ -237,9 +266,9 @@ public class UserRepository {
 
 :::note Exercice A : Utilisation du repository
 
-Dans un nouveau fichier RepositorySandbox.java créez une
-méthode main qui en utilisant une instance de la 
-classe UserRepository : 
+Dans un nouveau fichier `RepositorySandbox.java` créez une
+méthode `public static void main(String[] args)` qui en 
+utilisant une instance de la classe `UserRepository` : 
 1. Affiche tous les utilisateurs de la table Users.
 1. Insère l'utilisateur actif Isaac, né le 01/12/1995, mesurant 1.89 mètre.
 1. Affiche tous les utilisateurs de la table Users.
@@ -263,6 +292,7 @@ classDiagram
         +findAll(): List~T~
         +save(item: T): K
         +deleteById(key: K): void
+        +close(): void
     }
 
     class UserRepository~Integer,UserDto~ {
@@ -270,6 +300,7 @@ classDiagram
         +findAll(): List~UserDto~
         +save(user: UserDto): Integer
         +deleteById(id: Integer): void
+        +close(): void
     }
 
     class OrderRepository~Integer,OrderDto~ {
@@ -277,6 +308,7 @@ classDiagram
         +findAll(): List~OrderDto~
         +save(user: OrderDto): Integer
         +deleteById(id: Integer): void
+        +close(): void
     }
 
     Repository <|.. UserRepository
