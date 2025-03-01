@@ -129,7 +129,8 @@ N'oubliez pas de valider vos mises à jours, en appuyant par
 exemple sur le bouton *Write changes* dans *DB browser for SQLite*.
 
 Modifiez la requête de selection pour afficher
-tous les utilisateurs et toutes leurs commandes associées.
+tous les utilisateurs et toutes les informations liées à 
+leurs commandes (date et heure, montant et statut).
 Utilisez une jointure pour réaliser cet exercice.
 
 :::
