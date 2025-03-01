@@ -147,6 +147,15 @@ une seule fois.
 
 :::
 
+:::warning SQLite et vérification des contraintes de clés étrangères
+
+SQLite ne prend pas en charge par défaut la vérification des 
+contraintes de clés étrangères ! Il faut explicitement en faire 
+la demande lors de la connexion à la BD par l’intermédiaire des 
+services de la classe org.sqlite.SQLiteConfig.
+
+:::
+
 ## Requêtes DELETE
 
 La suppression d'une donnée suit le même processus que la mise à
