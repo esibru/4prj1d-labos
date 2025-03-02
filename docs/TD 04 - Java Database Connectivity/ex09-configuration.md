@@ -35,10 +35,12 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 class ConnectionManager {
+    // highlight-next-line
     private static Properties properties = null;
 
     private static Connection connection;
 
+    // highlight-start
     private static Properties loadProperties() {
         if (properties == null) {
             properties = new Properties();
@@ -50,16 +52,19 @@ class ConnectionManager {
         }
         return properties;
     }
+    // highlight-end
 
     static Connection getConnection() {
         if (connection == null) {
             try {
+                // highlight-start
                 loadProperties();
                 Properties config = loadProperties();
                 String url = config.getProperty("db.url");
                 String user = config.getProperty("db.user");
                 String password = config.getProperty("db.password");
                 connection = DriverManager.getConnection(url, user, password);
+                // highlight-end
             } catch (SQLException ex) {
                 throw new RepositoryException("Connexion impossible", ex);
             }

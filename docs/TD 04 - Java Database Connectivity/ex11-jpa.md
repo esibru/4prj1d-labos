@@ -1,4 +1,4 @@
-# Exercice 10 - Facultatif - JPA
+# Compléments - JPA [Facultatif]
 
 Dans les cours de Web vous avez utilisé Spring Data JPA, qui 
 facilite énormément l’accès aux bases de données en générant 
@@ -14,16 +14,16 @@ Dans cette section, vous allez apprendre à implémenter un
 Repository en utilisant JPA et Hibernate, sans la couche 
 d’abstraction offerte par Spring Data JPA.
 
-Dans cette section, vous allez :
+En résumé vous allez :
 
 - Configurer Hibernate et JPA manuellement (sans Spring Data JPA).
 - Définir une entité JPA et la mapper à une table de base de données.
 - Écrire un Repository personnalisé qui gère les opérations CRUD (Create, Read, Update, Delete) en utilisant EntityManager.
 - Gérer les transactions avec EntityTransaction.
 
-## Quelques rappels
+## Contexte sur les ORM en java
 
-### JPA (Java Persistence API)
+### Java Persistence API
 
 JPA est une spécification Java qui définit une interface 
 standard pour la gestion des bases de données relationnelles via 
@@ -44,18 +44,19 @@ différentes bases de données.
 
 Spring Data JPA est une surcouche de JPA fournie par le 
 framework Spring. Elle simplifie encore davantage l'accès aux 
-bases de données en réduisant le code boilerplate, en offrant 
+bases de données en réduisant le code, en offrant 
 des repositories automatiques et en permettant la génération 
 dynamique des requêtes à partir de méthodes d’interface.
 
-## Dépendances
+## Ajout des dépendances
 
-Avant de pouvoir utiliser JPA avec Hibernate dans notre projet, 
+Avant de pouvoir utiliser JPA avec Hibernate dans votre projet, 
 il est nécessaire d’ajouter les bonnes dépendances dans le 
-fichier pom.xml de Maven.
+fichier pom.xml.
 
-JPA est une spécification, et Hibernate est une implémentation 
-courante de cette spécification. Nous devons donc inclure :
+JPA est une spécification et Hibernate est une 
+**implémentation** courante de cette spécification. 
+Vous devez donc inclure :
 
 - L’API JPA pour utiliser les annotations et les fonctionnalités standard.
 - Hibernate en tant que fournisseur JPA, qui gérera les interactions avec la base de données.
@@ -64,66 +65,92 @@ courante de cette spécification. Nous devons donc inclure :
 
 ```xml showLineNumbers title="pom.xml"
 <dependency>
-        <groupId>jakarta.persistence</groupId>
-        <artifactId>jakarta.persistence-api</artifactId>
-        <version>3.2.0</version>
-    </dependency>
+    <groupId>jakarta.persistence</groupId>
+    <artifactId>jakarta.persistence-api</artifactId>
+    <version>3.2.0</version>
+</dependency>
 
-    <dependency>
-        <groupId>org.hibernate.orm</groupId>
-        <artifactId>hibernate-core</artifactId>
-        <version>6.6.9.Final</version>
-    </dependency>
+<dependency>
+    <groupId>org.hibernate.orm</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>6.6.9.Final</version>
+</dependency>
 
-    <!-- Pour la gestion des logs -->
-    <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>2.0.16</version>
-    </dependency>
+<!-- Pour la gestion des logs -->
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-api</artifactId>
+    <version>2.0.16</version>
+</dependency>
 
-    <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-simple</artifactId>
-        <version>2.0.16</version>
-        <scope>runtime</scope>
-    </dependency>
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-simple</artifactId>
+    <version>2.0.16</version>
+    <scope>runtime</scope>
+</dependency>
 
-    <dependency>
-        <groupId>org.hibernate.orm</groupId>
-        <artifactId>hibernate-community-dialects</artifactId>
-        <version>6.6.9.Final</version>
-    </dependency>
+<!-- Pour la compatibilité avec SQLite -->
+<dependency>
+    <groupId>org.hibernate.orm</groupId>
+    <artifactId>hibernate-community-dialects</artifactId>
+    <version>6.6.9.Final</version>
+</dependency>
 ```
 
 
 ## Configuration
 
 Dans une application utilisant JPA avec Hibernate, le fichier 
-persistence.xml est essentiel pour définir la Persistence Unit. 
+`persistence.xml` est essentiel pour définir la 
+**Persistence Unit**. 
+
+:::info Persistence Unit
+
+Une Persistence Unit regroupe l'ensemble des informations de configuration nécessaires pour la gestion de la persistance des données dans une application.
+
+:::
+
+
 Ce fichier permet de configurer :
-- Le provider JPA (ici, Hibernate).
+- Le provider JPA, Hibernate dans votre cas.
 - L’URL de connexion à la base de données et le driver JDBC utilisé.
 - Les paramètres spécifiques à Hibernate, comme la génération automatique du schéma.
 - Le mode de gestion des transactions.
 
-Ce fichier est placé dans le dossier META-INF du dossier 
-resources et est lu par JPA pour établir la connexion à la base 
-de données.
+:::info META-INF
+
+Le dossier META-INF est un répertoire standard utilisé dans les 
+applications Java, principalement pour stocker des métadonnées 
+et des fichiers de configuration importants pour l'application, 
+ou pour l'infrastructure qui l'exécute (comme un serveur 
+d'application ou un conteneur).
+
+Il est généralement situé à la racine de certaines archives 
+Java, comme des fichiers JAR.
+
+:::
+
+Le fichier `persistence.xml` est placé dans le dossier META-INF 
+du dossier resources et est lu par JPA pour établir la connexion 
+à la base de données.
 
 
-```xml showLineNumbers title="persistence.xml"
+```xml showLineNumbers title="META-INF/persistence.xml"
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="https://jakarta.ee/xml/ns/persistence"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
              version="3.0">
+// highlight-next-line             
     <persistence-unit name="userPU">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        // highlight-next-line
         <class>be.esi.prj.orm.User</class>
 
         <properties>
             <!-- URL de connexion à la base de données SQLite -->
+            // highlight-next-line
             <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlite:external-data/demo.db"/>
             <property name="jakarta.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
             <property name="jakarta.persistence.jdbc.user" value=""/>
@@ -139,14 +166,20 @@ de données.
 </persistence>
 ```
 
+Prenez attention aux valeurs surlignées qui doivent être adaptée
+à votre projet  :
+- **persistence-unit** : nom qui sera utilisé dans le code du Repository.
+- **class** : chemin vers les entités.
+- **jakarta.persistence.jdbc.url** : url de votre base de données.
+
 ## De DTO à Entité
 
 Dans une application utilisant JPA avec Hibernate, les DTO (Data 
 Transfer Objects) ne sont plus nécessaires pour représenter les 
-données en base. 
-À la place, vous utilisez des entités JPA, qui sont des classes 
-annotées permettant de mapper directement les tables de la base 
-de données.
+données. 
+À la place, vous utilisez des **entités** JPA, qui sont des 
+classes annotées permettant de mapper directement les tables de 
+la base de données.
 
 Ces entités :
 
@@ -155,31 +188,40 @@ Ces entités :
 - Simplifient le code en évitant de devoir convertir constamment entre DTO et objets métier.
 
 ```java showLineNumbers title="User.java"
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+package be.esi.prj.orm;
+
+import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 public class User {
 
     @Id
-    private Long id;
-    private String name;
-    private String email;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
+    private String name;
+    private LocalDate birthDate;
+    private double height;
+    private boolean active;
+
+    // Constructeur par défaut (nécessaire pour JPA)
     public User() {}
 
-    public User(Long id, String name, String email) {
-        this.id = id;
+    // Constructeur avec tous les arguments
+    public User(String name, LocalDate birthDate, double height, boolean active) {
         this.name = name;
-        this.email = email;
+        this.birthDate = birthDate;
+        this.height = height;
+        this.active = active;
     }
 
     // Getters et Setters
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -191,21 +233,32 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
     }
 
-    @Override
-    public String toString() {
-        return "User{id=" + id + ", name='" + name + "', email='" + email + "'}";
+    public double getHeight() {
+        return height;
     }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    // Méthode toString, hashCode, equals si nécessaire...
 }
-
-
 ```
 
 ## Repository
@@ -214,67 +267,73 @@ Maintenant que vous avez défini votre entité JPA, vous allez
 implémenter le UserRepository en utilisant JPA avec Hibernate. 
 Contrairement à l’approche JDBC classique, où vous deviez écrire 
 des requêtes SQL manuellement, JPA vous permet de manipuler 
-directement les entités via l'EntityManager.
+directement les entités via la classe **EntityManager**.
 
-Dans cette section, vous allez :
-- Utiliser EntityManager pour insérer, mettre à jour, supprimer et rechercher des utilisateurs.
-- Implémenter les méthodes du UserRepository en tirant parti des fonctionnalités de JPA.
+Le code ci-dessous vous montre comment :
+- Utiliser `EntityManager` pour insérer, mettre à jour, supprimer et rechercher des utilisateurs.
+- Implémenter les méthodes du `UserRepository` en tirant parti des fonctionnalités de JPA.
 - Remplacer la gestion manuelle des requêtes SQL par des appels simplifiés aux entités.
 
 ```java showLineNumbers title="UserRepository.java"
+package be.esi.prj.orm;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
+
 import java.util.List;
+import java.util.Optional;
 
 public class UserRepository {
 
     private EntityManagerFactory emf;
     private EntityManager em;
 
-    // Constructeur : Création de l'EntityManager et EntityManagerFactory
     public UserRepository() {
-        // Initialisation de l'EntityManagerFactory avec le nom de la persistence-unit défini dans persistence.xml
+        // highlight-next-line
         emf = Persistence.createEntityManagerFactory("userPU");
         em = emf.createEntityManager();
     }
 
-    public void addUser(User user) {
-        try {
-            em.getTransaction().begin();
-            em.persist(user);  // Persiste l'objet dans la base de données
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();  // En cas d'erreur, rollback pour éviter de laisser des données inconsistantes
-            e.printStackTrace();
-        }
+    public Optional<User> findById(int id) {
+        return Optional.of(em.find(User.class, id));
     }
 
-    public List<User> getAllUsers() {
+    public int save(User user) {
+        int generatedId = -1;
+        try {
+            em.getTransaction().begin();
+            em.persist(user);
+            em.getTransaction().commit();
+
+            // L'ID est mis à jour après la persistance
+            generatedId = user.getId();
+
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw e;
+        }
+        return generatedId;  // Retourne l'ID généré
+    }
+
+    public List<User> findAll() {
         TypedQuery<User> query = em.createQuery("SELECT u FROM User u", User.class);
         return query.getResultList();
     }
 
-    public User getUserById(Long id) {
-        return em.find(User.class, id);
-    }
-
-    public void deleteUser(Long id) {
-        User user = getUserById(id);
-        if (user != null) {
-            try {
-                em.getTransaction().begin();
-                em.remove(user);  // Supprime l'entité de la base de données
-                em.getTransaction().commit();
-            } catch (Exception e) {
-                em.getTransaction().rollback();
-                e.printStackTrace();
-            }
+    public void delete(int id) {
+        User user = findById(id).orElseThrow();
+        try {
+            em.getTransaction().begin();
+            em.remove(user);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw e;
         }
     }
 
-    // Méthode pour fermer les ressources : EntityManager et EntityManagerFactory
     public void close() {
         em.close();
         emf.close();
@@ -286,6 +345,6 @@ public class UserRepository {
 
 Remplacez dans la classe `RepositorySandbox` l'instance
 de UserRepository utilisant JDBC par une instance utilisant
-JPA. Constatez-vous une différence ?
+JPA. Constatez-vous une différence autre que modifier `UserDto` en `User` ?
 
 :::
