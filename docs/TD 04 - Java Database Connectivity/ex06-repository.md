@@ -245,7 +245,7 @@ public class UserRepository {
         } catch (SQLException e) {
             throw new RepositoryException("Selection impossible", e);
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<UserDto> findAll() {
