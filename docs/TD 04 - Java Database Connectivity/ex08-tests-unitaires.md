@@ -1,15 +1,23 @@
 # Exercice 8 - Tests unitaires
 
+Votre Repository développé, il faut en valider la logique via des tests unitaires. Les
+tests unitaires ayant pour rôle de valider chaque classe de manière indépendante, il va
+falloir être prudent lors de l’écriture de ces tests.
+
 ## Tester un Dao
 
-Ce test unitaire :
+Pour valider le comportement implémenté dans `UserDao`
+sans modifier les données de la base de données réelles, 
+le test unitaire doit :
 
-1. Crée une base de données SQLite en mémoire pour isoler les tests.
-1. Initialise la table users avant tous les tests.
-1. Nettoie les données après chaque test pour éviter toute interférence.
+1. Créer une base de données SQLite en mémoire pour isoler les tests.
+1. Initialiser la table Users avant chaque test.
+1. Nettoyer les données après chaque test pour éviter toute interférence.
 1. Ferme la connexion une fois tous les tests terminés.
-1. Teste findById() en vérifiant la cohérence des données.
 
+A l'aide des annotations `@BeforeAll`, `@BeforeEach` , 
+`@AfterEach` et `@AfterAll` ces contraintes peuvent être 
+respectées, comme montré avec le code ci-dessous.
 
 ```java showLineNumbers title="UserDaoTest.java"
 import dto.UserDto;
@@ -81,20 +89,61 @@ class UserDaoTest {
         connection.close();
     }
 
-    @Test
-    void testSelectExist() {
-        System.out.println("testSelectExist");
-        //Arrange
-        UserDto expected = alice;
-        //Action
-        UserDto result = instance.findById(1);
-        //Assert
-        assertEquals(expected, result);
-    }
 }
 ```
 
+Vous devez ensuite ajouter les cas de tests des différentes
+méthodes de `UserDao`. Pour la méthode `findById(int id)`,
+deux cas de tests sont obligatoires : 
+- appeler la méthode avec l'identifiant d'un utilisateur existant.
+- appeler la méthode avec l'identifiant d'un utilisateur inexistant.
+
+```java showLineNumbers title="UserDaoTest.java"
+    @Test
+    void testFindByIdExist() {
+        System.out.println("testFindByIdExist");
+        //Arrange
+        Optional<UserDto> expected = Optional.of(alice);
+        //Action
+        Optional<UserDto> result = instance.findById(1);
+        //Assert
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void testFindByIdDoesNotExist() {
+        System.out.println("testFindByIdDoesNotExist");
+        //Arrange
+        Optional<UserDto> expected = Optional.empty();
+        //Action
+        Optional<UserDto> result = instance.findById(100);
+        //Assert
+        assertEquals(expected, result);
+    }
+```
+
+:::note Exercice A : Tester UserDao
+
+Implémentez les tests unitaires des méthodes `findAll()`, 
+`save(UserDto user)` et `delete(int id)` de la classe `UserDao`.
+
+:::
+
 ## Tester un Repository
+
+L’objectif des tests unitaires est de valider le fonctionnement 
+de la classe Repository **uniquement**. 
+C’est à dire que le Repository doit fonctionner 
+**peu importe l’implémentation du Dao** 
+(lecture de fichier, accès à une base de données).
+Pour réaliser cette division entre le Repository et le Dao nous 
+allons utiliser une copie modifiée du Dao, ce que l’on appelle 
+un **Mock**.
+En java une librairie utilisée pour créer ces Mocks est **Mockito**.
+
+### Mise en place de Mockito
+
+Commencez par ajouter à votre pom.xml les dépendances à Mockito :
 
 ```xml showLineNumbers title="pom.xml"
 <dependency>
@@ -111,6 +160,39 @@ class UserDaoTest {
 </dependency>
 ```
 
+Pour tester `UserRepository` il faut instancier `UserDao`
+dans votre code de test en précisant qu'il ne faut pas utiliser 
+l'implémentation réelle, mais une imitation. 
+On peut réaliser cette substitution via l'annotation `@Mock` ou 
+en appelant la méthode `mock` de la classe `Mockito` : 
+
+```java
+UserDao userDao = mock(UserDao.class);
+```
+
+Ensuite il faut définir le comportement du mock pour chaque
+appel de méthode utilisée lors d'un test. 
+Par exemple si l'on souhaite demander au mock de retourner
+une liste contenant un seul utilisateur lors d'un appel
+à la méthode `UserDao.findAll()`, vous pouvez utiliser :
+
+```java
+UserDto user = new UserDto(1, "John Doe", LocalDate.of(1990, 1, 1), 1.80, true);
+when(userDao.findAll()).thenReturn(List.of(user));
+```
+
+Finalement pour associer la classe testée, `UserRepository`,
+à la classe substituée, il suffit d’instancier `UserRepository`
+avec le mock de la classe `UserDao` en paramètre.
+
+```java
+UserRepository userRepository = new UserRepository(userDao);
+```
+### Tester UserRepository
+
+Le fonctionnement de Mockito conduit à la classe de test
+ci-dessous validant le comportement de la méthode
+`findById(int id)` de la classe `UserRepository`.
 
 ```java showLineNumbers title="UserRepositoryTest.java"
 
@@ -120,9 +202,6 @@ import static org.mockito.Mockito.*;
 import dto.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -130,55 +209,69 @@ import java.util.Optional;
 
 class UserRepositoryTest {
 
-    @Mock
     private UserDao userDao;
 
-    @InjectMocks
     private UserRepository userRepository;
 
     private UserDto user;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
-        user = new UserDto(1, "John Doe", LocalDate.of(1990, 1, 1), 1.80, true);
+        user = new UserDto(1, "John Doe", 
+                LocalDate.of(1990, 1, 1), 
+                1.80, true);
+
+        // Crée le mock avant instanciation de l'objet testé
+        userDao = mock(UserDao.class);
+
+        // Configure les comportements des mocks avant création
+        when(userDao.findAll()).thenReturn(List.of(user));
+
+        // Instancie la classe testée avec le mock
+        userRepository = new UserRepository(userDao);
     }
 
     @Test
-    void testFindById_UserExists() {
-        when(userDao.findById(1)).thenReturn(user);
+    void testFindByIdExists() {
+        System.out.println("testFindByIdExists");
+        //Arrange
+        when(userDao.findById(1)).thenReturn(Optional.of(user));
+        //Action
         Optional<UserDto> result = userRepository.findById(1);
+        //Assert
         assertTrue(result.isPresent());
         assertEquals(user, result.get());
+        verify(userDao, times(0)).findById(1);
     }
 
     @Test
-    void testFindById_UserDoesNotExist() {
-        when(userDao.findById(2)).thenReturn(null);
+    void testFindByIdDoesNotExist() {
+        System.out.println("testFindByIdDoesNotExist");
+        //Arrange
+        when(userDao.findById(2)).thenReturn(Optional.empty());
+        //Action
         Optional<UserDto> result = userRepository.findById(2);
+        //Assert
         assertFalse(result.isPresent());
-    }
-
-    @Test
-    void testFindAll() {
-        when(userDao.findAll()).thenReturn(List.of(user));
-        List<UserDto> users = userRepository.findAll();
-        assertEquals(1, users.size());
-        assertEquals(user, users.get(0));
-    }
-
-    @Test
-    void testSave() {
-        when(userDao.save(any(UserDto.class))).thenReturn(1);
-        int generatedId = userRepository.save(user);
-        assertEquals(1, generatedId);
-    }
-
-    @Test
-    void testDelete() {
-        doNothing().when(userDao).delete(1);
-        userRepository.delete(1);
-        verify(userDao, times(1)).delete(1);
-    }
+        verify(userDao, times(1)).findById(2);
+    }    
 }
 ```
+
+Lors de la vérification des tests (phase Assert), vous
+utiliserez la méthode `verify()` de Mockito.
+`verify()` permet de vérifier qu'une méthode a bien été appelée 
+sur un objet *mocké*, et ce, selon **le nombre de fois attendu**
+et **avec les paramètres spécifiés**. 
+
+Dans le cas du test de la 
+méthode `findById(int id)`, on s'attend à ce qu'aucun appel ne
+soit effectué à la classe `UserDao` si l'utilisateur est dans
+le cache et à un unique appel si il n'est pas dans le cache.
+
+:::note Exercice B : Tester UserRepository
+
+Implémentez les tests unitaires des méthodes `findAll()`, 
+`save(UserDto user)` et `delete(int id)` de la classe `UserRepository`.
+
+:::
