@@ -41,28 +41,29 @@ public class Transaction {
 
             // Désactiver l'auto-commit pour gérer la transaction
             conn.setAutoCommit(false);
-
+            
+            String insertNameHeightDobStmt = "INSERT INTO users (name, height,birth_date) VALUES (?, ?, ?)";
+            
             try (PreparedStatement pstmt1
-                         = conn.prepareStatement(
-                    "INSERT INTO users (name, height) VALUES (?, ?)");
+                         = conn.prepareStatement(insertNameHeightDobStmt);
                  PreparedStatement pstmt2
-                         = conn.prepareStatement(
-                         "INSERT INTO users (name, height) VALUES (?, ?)");
+                         = conn.prepareStatement(insertNameHeightDobStmt);
                  PreparedStatement pstmt3
-                         = conn.prepareStatement(
-                         "INSERT INTO users (name, height) VALUES (?, ?)")) {
+                         = conn.prepareStatement(insertNameHeightDobStmt)) {
 
                 pstmt1.setString(1, "Mallory");
                 pstmt1.setDouble(2, 178);
+                pstmt1.setString(3, "1996-07-10");
                 pstmt1.executeUpdate();
 
                 pstmt2.setString(1, "Oscar");
                 pstmt2.setDouble(2, 169);
+                pstmt1.setString(3, "2003-03-25");
                 pstmt2.executeUpdate();
 
                 pstmt3.setString(1, "Trudy");
                 pstmt3.setDouble(2, 100 / 0); // Erreur volontaire
-
+                pstmt3.setString(3, "2001-01-01");
                 pstmt3.executeUpdate();
 
                 // Si tout fonctionne, on valide la transaction
