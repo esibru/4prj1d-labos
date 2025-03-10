@@ -21,7 +21,7 @@ précédents.
 La structure du projet à construire est la suivante : 
 
 ```bash
-/src
+/src/main/java
  ├── dto
  │   ├── UserDto.java
  ├── repository
