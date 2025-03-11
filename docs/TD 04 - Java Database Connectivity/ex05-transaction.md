@@ -58,7 +58,7 @@ public class Transaction {
 
                 pstmt2.setString(1, "Oscar");
                 pstmt2.setDouble(2, 169);
-                pstmt1.setString(3, "2003-07-14");
+                pstmt2.setString(3, "2003-07-14");
                 pstmt2.executeUpdate();
 
                 pstmt3.setString(1, "Trudy");
