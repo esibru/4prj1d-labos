@@ -12,7 +12,7 @@ Ce fichier présent dans les **ressources du projet** peut
 prendre la forme suivante
 
 ```properties showLineNumbers title="database.properties"
-db.url=jdbc:sqlite:externat-data/demo.db
+db.url=jdbc:sqlite:external-data/demo.db
 db.user=admin
 db.password=secret
 ```
