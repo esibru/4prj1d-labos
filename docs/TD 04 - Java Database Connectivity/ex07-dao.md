@@ -256,7 +256,7 @@ classDiagram
 ```
 
 Modifiez la classe `UserRepository` avec l'implémentation 
-ci-dessous pour déléguer l'accès aux données à  la classe 
+ci-dessous pour déléguer l'accès aux données à la classe 
 `UserDao`. Utilisez **ConcurrentHashMap** 
 comme système de cache pour stocker les utilisateurs en mémoire.
 
