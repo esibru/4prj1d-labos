@@ -270,7 +270,7 @@ public class UserRepository {
         return users;
     }
 
-    public int save(UserDto user) {
+    private int insert(UserDto user) {
         String sql = """
                 INSERT INTO 
                     users (name, birth_date, height, is_active) 
@@ -295,6 +295,50 @@ public class UserRepository {
             throw new RepositoryException("Insertion impossible", e);
         }
         return -1;
+    }
+
+    private int update(UserDto user) {
+        String sql = """
+                UPDATE users
+                SET
+                    name = ?, birth_date = ?, height = ?, is_active = ?
+                WHERE id = ?
+                """;
+        int updatedRows = 0;
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, user.name());
+            String datetext = formatter.format(user.birthDate());
+            stmt.setString(2, datetext);
+            stmt.setDouble(3, user.height());
+            stmt.setBoolean(4, user.active());
+            stmt.setInt(5,user.id());
+            updatedRows = stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RepositoryException("Sauvegarde impossible", e);
+        }
+        return updatedRows; // Retourne le nombre de lignes affectées
+    }
+
+    public int save(UserDto user) {
+        int result = -1;
+        String sql = "SELECT COUNT(*) FROM users WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1,user.id());
+            ResultSet rs = stmt.executeQuery();
+            boolean found = rs.next() && rs.getInt(1)>0;
+            if (found) {
+                if (this.update(user)>0) {
+                    result = user.id();
+                }
+            } else {
+                result = this.insert(user);
+            }
+            return result;
+        }
+        catch (SQLException e) {
+          throw new RepositoryException("Recherche impossible", e);
+        }
     }
 
     public void delete(int id) {
