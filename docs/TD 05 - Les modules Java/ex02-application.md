@@ -152,7 +152,7 @@ Service service = ServiceLoader
 service.performAction();
 ```
 
-:::note Exercice
+:::note Exercice: Mise en application
 
 Créez un nouveau module `bye` contenant une classe qui implémente également l'interface Service, par exemple avec la méthode suivante:
 ```
