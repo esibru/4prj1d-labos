@@ -151,3 +151,16 @@ Service service = ServiceLoader
         .orElseThrow();
 service.performAction();
 ```
+
+:::note Exercice: Mise en application
+
+Créez un nouveau module `bye` contenant une classe qui implémente également l'interface Service, par exemple avec la méthode suivante:
+```
+    @Override
+    public void performAction() {
+        System.out.println("Good-bye from service action!");
+    }
+```
+Modifiez votre application pour que ce module soit utilisé en lieu et place de `hello`.
+
+:::
