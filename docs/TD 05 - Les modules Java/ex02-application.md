@@ -151,7 +151,9 @@ Service service = ServiceLoader
         .orElseThrow();
 service.performAction();
 ```
+
 :::note Exercice
+
 Créez un nouveau module `bye` contenant une classe qui implémente également l'interface Service, par exemple avec la méthode suivante:
 ```
     @Override
@@ -160,4 +162,5 @@ Créez un nouveau module `bye` contenant une classe qui implémente également l
     }
 ```
 Modifiez votre application pour que ce module soit utilisé en lieu et place de `hello`.
+
 :::
