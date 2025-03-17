@@ -11,7 +11,7 @@ Le fichier `pom.xml` de `ModuleApp` devrait avoir l'apparence habituelle, à une
 <modules>
     <module>hello</module>
     <module>api</module>
-    <module>app</module>
+    <module>main</module>
 </modules>
 ```
 
