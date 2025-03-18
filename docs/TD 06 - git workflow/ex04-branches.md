@@ -109,7 +109,8 @@ Cette nouvelle branche `develop` est une branche qui est actuellement locale. El
 - Listez toutes les branches, même les distantes.
 
     ```bash
-    git remote update git branch -a
+    git remote update
+    git branch -a
     ```
 :::
 
@@ -207,7 +208,8 @@ Nous allons modifier le même fichier de deux endroits différents **et** dans d
 - Validez le changement.
 
     ```bash
-    git add src git commit -m "Add license"
+    git add src
+    git commit -m "Add license"
     ```
 :::
 
@@ -299,7 +301,8 @@ Nous supposons que la branche `develop` contient plusieurs *commits* à intégre
 - Taguez la v2 et pousser sur le dépôt.
 
     ```bash
-    git tag v2 git push
+    git tag v2
+    git push
     ```
 :::
 
