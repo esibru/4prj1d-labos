@@ -39,7 +39,7 @@ En Java, la _réflexion_ fait référence à la pratique de consulter, __à l'ex
 La réflexion est utilisée par de nombreux frameworks, tels que JUnit ou Spring, quand ceux-ci ont besoin par exemple d'instancier des objets de façon dynamique. FXML, par exemple, se sert de la réflexion pour identifier la classe de contrôleur associé à un fichier FXML, et les attributs et méthodes de ce contrôleur annotés via `@FXML`.
 :::
 
-- `open` ouvre un package à la _réflexion_. Toutes les classes du package, quelle que soit leur visibilité, sont alors accessible.
+- `open` ouvre un package à la _réflexion_. Toutes les classes du package, quelle que soit leur visibilité, sont alors accessibles.
 - `exports` définit un package comme _point d'accès_. Seules les classes _publiques_ du package sont rendues accessibles à la fois à la compilation et à l'exécution. Ces classes peuvent donc être _importées_ par les classes présentes dans d'autres modules.
 
 Par défaut, un package ouvert ou exporté est accessible à tout module. Il est également possible de _qualifier_ cet accès via le mot-clé `to` suivi d'un nom de module, afin de ne donner accès qu'à ce module. Cela nous permet d'avoir un contrôle complet sur l'encapsulation de notre module.
