@@ -347,7 +347,7 @@ classDiagram
         }
 
         class UserDao~Integer,UserDto~ {
-            ~findById(id: Integer): UserDto
+            ~findById(id: Integer): Optional~UserDto~
             ~findAll(): List~UserDto~
             ~save(user: UserDto): Integer
             ~deleteById(id: Integer): void
@@ -366,7 +366,7 @@ classDiagram
 
         class Dao~K,T~ {
             <<interface>>
-            ~findById(key: K): T
+            ~findById(key: K): Optional~T~
             ~findAll(): List~T~
             ~save(item: T): K
             ~deleteById(key: K): void
@@ -385,7 +385,7 @@ classDiagram
         }
 
         class OrderDao~Integer,OrderDto~ {
-            ~findById(id: Integer): OrderDto
+            ~findById(id: Integer): Optional~OrderDto~
             ~findAll(): List~OrderDto~
             ~save(user: OrderDto): Integer
             ~deleteById(id: Integer): void
