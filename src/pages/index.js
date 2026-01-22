@@ -18,7 +18,7 @@ function HomepageHeader() {
         <div>
           <a
             className="button button--secondary button--lg"
-            href="docs/TD 01 - Proof of concept/ex00-introduction"
+            href="docs/TD 01 - Interface utilisateur avec Scene Builder/ex00-introduction"
           >
             Commencer les travaux dirigés
           </a>
@@ -42,7 +42,7 @@ export default function Home() {
           <section>
             <p>
               Bienvenue dans cette série de travaux dirigés (TD) dédiée
-              à l’apprentissage et à la mise en pratique de concepts
+              à l'apprentissage et à la mise en pratique de concepts
               de développement logiciel en Java.
             </p>
           </section>
@@ -50,13 +50,8 @@ export default function Home() {
             <h3>Plan des Travaux Dirigés</h3>
             <ol>
               <li>
-                <strong>Proof of Concept du projet</strong><br />
-                Première étape du projet : exploration d’une librairie à travers la réalisation
-                d’un Proof of Concept.
-              </li>
-              <li>
                 <strong>Interface utilisateur avec Scene Builder</strong><br />
-                Conception d’une interface utilisateur en utilisant JavaFX et Scene Builder.
+                Conception d'une interface utilisateur en utilisant JavaFX et Scene Builder.
               </li>
               <li>
                 <strong>Programmation concurrente</strong><br />
@@ -65,28 +60,13 @@ export default function Home() {
               </li>
               <li>
                 <strong>Java Database Connectivity</strong><br />
-                Connexion d’une base de données à une application Java grâce à l’API JDBC.
+                Connexion d'une base de données à une application Java grâce à l'API JDBC.
                 Manipulation des données à travers des requêtes SQL.
               </li>
               <li>
                 <strong>Organiser le travail : modules Java et workflow Git</strong><br />
-                Structuration d’un projet avec le système de modules Java et
+                Structuration d'un projet avec le système de modules Java et
                 mise en pratique des workflows Git pour une collaboration efficace.
-              </li>
-              <li>
-                <strong>Projet - Analyse</strong><br />
-                Conception/Modélisation et planification du projet.
-                Description des besoins utilisateurs, création des diagrammes UML (cas d'utilisation, classes, séquences)
-                et élaboration du plan de tests.
-                <li>
-                  <strong>Projet - Implémentation</strong><br />
-                  Développement et intégration des différentes fonctionnalités du projet
-                  en s’appuyant sur l’analyse initiale et les sujets étudiés en TD.
-                </li>
-                <li>
-                  <strong>Présentation du projet</strong><br />
-                  Présentation de votre projet et critique des choix effectués
-                  tant dans la conception que dans le développement.</li>
               </li>
             </ol>
           </section>
