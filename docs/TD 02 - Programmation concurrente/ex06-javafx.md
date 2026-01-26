@@ -58,10 +58,8 @@ sur le bouton modifie le texte du libellé affiché.
 
 :::note Exercice A
 
-Affichez dans le terminal le nom et le statut des threads 
-grâce à la méthode `Thread.getAllStackTraces()`.
-Vérifiez la présence de *JavaFX Application Thread* 
-dans cette liste.
+Affichez dans le terminal le nom et le statut des threads grâce à la méthode `Thread.getAllStackTraces()`.  
+Vérifiez la présence de *JavaFX Application Thread* dans cette liste.
 
 :::
 
@@ -76,7 +74,7 @@ ait le comportement suivant :
 
 ```java showLineNumbers title="Action associée au bouton"
 button.setOnAction(event -> {
-    new Thread(() -> {
+    Thread.startVirtualThread(() -> {
         try {
             System.out.println("Début du traitement de 2 secondes");
             Thread.sleep(2000);
@@ -85,8 +83,8 @@ button.setOnAction(event -> {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }).start();
-});
+    });
+})
 ```
 
 Lorsque vous testez l'application, si vous appuyez sur le bouton, une
@@ -117,6 +115,8 @@ envoyée.
 Si la tâche est longue et complexe, il est préférable d’utiliser 
 `Task<Void>` qui offre des fonctionnalités avancées 
 (comme `updateMessage()`  et `updateProgress()` ) pour mettre à 
-jour l’interface utilisateur. [Consultez la documentation pour en savoir plus.](https://openjfx.io/javadoc/23/javafx.graphics/javafx/concurrent/Task.html)
+jour l’interface utilisateur. 
+
+[Consultez la documentation.](https://openjfx.io/javadoc/23/javafx.graphics/javafx/concurrent/Task.html)
 
 :::

@@ -6,7 +6,7 @@ Créez les classes `ToujoursPair`, `MyThread` et `Test`.
 
 ```java showLineNumbers title="ToujoursPair.java"
 /**
- * Petite classe pourvue de deux methodes simples
+ * Petite classe pourvue de deux méthodes simples
  *
  * Exemple inspire par Thinking in Java, 3rd Edition, Beta Copyright (c)2002 by
  * Bruce Eckel www.BruceEckel.com
@@ -29,9 +29,9 @@ public class ToujoursPair {
 
 ```java showLineNumbers title="MyThread.java"
 /**
- * Thread accedant en lecture a une instance de ToujoursPair
+ * Thread accédant en lecture à une instance de ToujoursPair
  *
- * Exemple inspire par Thinking in Java, 3rd Edition, Beta Copyright (c)2002 by
+ * Exemple inspiré par Thinking in Java, 3rd Edition, Beta Copyright (c)2002 by
  * Bruce Eckel www.BruceEckel.com
  */
 public class MyThread extends Thread {
@@ -56,9 +56,9 @@ public class MyThread extends Thread {
 
 ```java showLineNumbers title="Test.java"
 /**
- * Thread accedant en ecriture et lecture a une instance de ToujoursPair
+ * Thread accédant en écriture et en lecture à une instance de ToujoursPair
  *
- * Exemple inspire par Thinking in Java, 3rd Edition, Beta Copyright (c)2002 by
+ * Exemple inspiré par Thinking in Java, 3rd Edition, Beta Copyright (c)2002 by
  * Bruce Eckel www.BruceEckel.com
  */
 public class Test {
@@ -102,7 +102,7 @@ Rappelons en effet que la méthode `run()` peut être interrompue
 
 :::
 
-## Méthode synchronised
+## Méthode `synchronized`
 
 Pour pallier les désagréments engendrés par le comportement 
 mis en évidence dans l'exemple précédent, on peut utiliser le 
@@ -112,8 +112,8 @@ Créez les classes `MyObjet`, `MyThread` et `Test`.
 
 ```java showLineNumbers title="MyObject.java"
 /**
- * Classe pourvue de deux methodes d'affichage : illustration de l'utilisation
- * du mot cle synchronized comme modificateur de methode.
+ * Classe pourvue de deux méthodes d'affichage : illustration de l'utilisation
+ * du mot clé synchronized comme modificateur de méthode.
  */
 public class MyObject {
 
@@ -153,7 +153,7 @@ public class MyObject {
 
 ```java showLineNumbers title="MyThread.java"
 /**
- * Thread utilisant une methode d'une instance de MyObject
+ * Thread utilisant une méthode d'une instance de MyObject
  */
 public class MyThread extends Thread {
 
@@ -175,7 +175,7 @@ public class MyThread extends Thread {
 
 ```java showLineNumbers title="Test.java"
 /**
- * Thread utilisant une methode d'une instance de MyObject et instanciant une ou
+ * Thread utilisant une méthode d'une instance de MyObject et instanciant une ou
  * deux nouvelles threads.
  */
 public class Test {
@@ -233,7 +233,7 @@ thread ne rend la clé du verrou que lorsqu'elle sort de la méthode la plus
 
 :::
 
-## Le bloc synchronised
+## Le bloc `synchronized`
 
 La portée du mot clé `synchronized` peut être restreinte à un 
 bloc. Dans ce cas il faut fournir en argument l'objet dont la clé du 
@@ -244,8 +244,8 @@ Créez les classes `MyObject`, `MyThread` et `Test`.
 
 ```java showLineNumbers title="MyObject.java"
 /**
- * Classe pourvue d'une methode d'affichage avec des blocs synchronized sur
- * l'objet lui-meme ou sur une chaine de caracteres.
+ * Classe pourvue d'une méthode d'affichage avec des blocs synchronized sur
+ * l'objet lui-meme ou sur une chaine de caractères.
  */
 public class MyObject {
 
@@ -292,7 +292,7 @@ public class MyObject {
 
 ```java showLineNumbers title="MyThread.java"
 /**
- * Thread utilisant une methode d'une instace de MyObject.
+ * Thread utilisant une méthode d'une instance de MyObject.
  */
 public class MyThread extends Thread {
 
@@ -314,8 +314,8 @@ public class MyThread extends Thread {
 
 ```java showLineNumbers title="Test.java"
 /**
- * Classe de test instanciant deux threads utilisant une methode a blocs
- * synchronises d'un meme objet.
+ * Classe de test instanciant deux threads utilisant une méthode à blocs
+ * synchronisés d'un même objet.
  */
 public class Test {
 
@@ -343,9 +343,6 @@ synchronisation des blocs `synchronized` de *fonction*
 
 :::info
 
-Lorsque la synchronisation se fait sur une chaîne de caractères, 
-on parle de synchronisation nommée. 
-La synchronisation peut également
-se faire sur **n'importe quel objet**.
+Lorsque la synchronisation se fait sur une chaîne de caractères, on parle de synchronisation nommée. La synchronisation peut également se faire sur **n'importe quel objet**.
 
 :::
