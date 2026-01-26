@@ -103,7 +103,7 @@ qui permet d’exécuter une tâche (`Runnable`) sur ce *JavaFX Application Thre
 Pour vous en convaincre, modifiez l'instruction de mise à jour
 du libellé via le code ci-dessous.
 
-```java showLineNumbers"
+```java showLineNumbers=6"
 Platform.runLater(()-> label.setText("Traitement terminé !"));
 ```
 
