@@ -22,12 +22,12 @@ et les fichiers FXML.
     <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-controls</artifactId>
-        <version>17.0.12</version>
+        <version>25.0.2</version>
     </dependency>
     <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-fxml</artifactId>
-        <version>17.0.12</version>
+        <version>25.0.2</version>
     </dependency>
 </dependencies>
 ```
