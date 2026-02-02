@@ -111,7 +111,7 @@ l'application.
 :::info Suppression d’un étudiant
 
 - Étape 1 : L’utilisateur sélectionne un étudiant dans le tableau.
-- Étape 2 : Il clique sur le bouton "Supprimer".
+- Étape 2 : L’utilisateur clique sur le bouton "Supprimer".
 - Étape 3 : Une confirmation est demandée.
 - Étape 4 : Si l’utilisateur confirme, l’étudiant est retiré du tableau et du fichier
 
@@ -129,15 +129,15 @@ vous trouverez ci-dessous les diagrammes de séquences associés.
 sequenceDiagram
     participant Utilisateur
     participant Interface
-    participant Controleur
-    participant Fichier
+    participant Contrôleur
+    participant FileManager
 
     Utilisateur->>Interface: Saisir les informations (Matricule, Nom, Prénom)
     Utilisateur->>Interface: Cliquer sur "Ajouter"
-    Interface->>Controleur: Vérifier que tous les champs sont remplis
-    Controleur-->>Interface: Validation réussie ou message d'erreur
-    Controleur->>Interface: Ajouter l'étudiant au TableView
-    Controleur->>Fichier: Enregistrer l'étudiant dans le fichier
+    Interface->>Contrôleur: Vérifier que tous les champs sont remplis
+    Contrôleur->>FileManager: Enregistrer l'étudiant dans le fichier
+    Contrôleur-->>Interface: Validation réussie ou message d'erreur
+    Contrôleur->>Interface: Ajouter l'étudiant au TableView
 
 ```
 
@@ -146,14 +146,14 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     participant Application
-    participant Controleur
-    participant Fichier
+    participant Contrôleur
+    participant FileManager
     participant Interface
 
-    Application->>Controleur: Démarrage de l'application
-    Controleur->>Fichier: Charger les étudiants depuis le fichier
-    Fichier-->>Controleur: Retourne la liste des étudiants
-    Controleur->>Interface: Afficher les étudiants dans le tableau
+    Application->>Contrôleur: Démarrage de l'application
+    Contrôleur->>FileManager: Charger les étudiants depuis le fichier
+    FileManager-->>Contrôleur: Retourne la liste des étudiants
+    Contrôleur->>Interface: Afficher les étudiants dans le tableau
 
 ```
 
@@ -163,16 +163,16 @@ sequenceDiagram
 sequenceDiagram
     participant Utilisateur
     participant Interface
-    participant Controleur
-    participant Fichier
+    participant Contrôleur
+    participant FileManager
 
     Utilisateur->>Interface: Sélectionner un étudiant
     Utilisateur->>Interface: Cliquer sur "Supprimer"
-    Interface->>Controleur: Demander confirmation
-    Controleur->>Utilisateur: Afficher boîte de dialogue de confirmation
-    Utilisateur-->>Controleur: Confirme la suppression
-    Controleur->>Interface: Retirer l’étudiant du tableau
-    Controleur->>Fichier: Supprimer l’étudiant du fichier
+    Interface->>Contrôleur: Demander confirmation
+    Contrôleur->>Utilisateur: Afficher boîte de dialogue de confirmation
+    Utilisateur-->>Contrôleur: Confirme la suppression
+    Contrôleur->>FileManager: Supprimer l’étudiant du fichier
+    Contrôleur->>Interface: Retirer l’étudiant du tableau
 
 ```
 
@@ -211,14 +211,7 @@ FxmlController "1" *--> "items *" Student
 
 Vérifiez manuellement que toutes les fonctionnalités de l'application respectent les besoins de l'utilisateurs en suivant le plan de tests proposés.  
 
-:::note Format simplifié
-
-Vous remarquerez que le nombre de cas de tests augmentant,
-une présentation plus succincte du plan est proposée.
-
-:::
-
-| ID  | Test                        | Données d’entrée | Résultat attendu                               |
+| ID  | Test                        | Données d’entrée/Actions | Résultat attendu                               |
 |-----|-----------------------------|-----------------|----------------------------------------------|
 | T1  | Démarrage initial           | Aucune          | L'application s'ouvre avec un `TableView` vide |
 | T2  | Chargement des étudiants     | Fichier contenant des étudiants | Les étudiants sont affichés dans le `TableView` |
