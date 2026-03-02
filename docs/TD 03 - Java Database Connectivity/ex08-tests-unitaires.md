@@ -13,9 +13,9 @@ le test unitaire doit :
 1. Créer une base de données SQLite en mémoire pour isoler les tests.
 1. Initialiser la table Users avant chaque test.
 1. Nettoyer les données après chaque test pour éviter toute interférence.
-1. Ferme la connexion une fois tous les tests terminés.
+1. Fermer la connexion une fois tous les tests terminés.
 
-A l'aide des annotations `@BeforeAll`, `@BeforeEach` , 
+À l'aide des annotations `@BeforeAll`, `@BeforeEach` , 
 `@AfterEach` et `@AfterAll` ces contraintes peuvent être 
 respectées, comme montré avec le code ci-dessous.
 
