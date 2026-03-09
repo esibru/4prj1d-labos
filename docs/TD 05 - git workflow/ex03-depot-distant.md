@@ -51,6 +51,10 @@ Que faut-il faire ?
     sur le  
     `+ / Nouveau projet / Create blank project`
 
+    :::warning
+    Attention, de créer un projet **vide**. Pour ce faire, il est sans doute nécessaire de décocher la case _Initialiser avec un fichier README.md.
+    :::
+
 4.  *Ajouter le remote* c'est-à-dire, dire à git (en local) qu'il existe
     un serveur distant avec lequel il va se synchroniser. La commande
     est proposée par *GitLab*. Dans mon cas:
